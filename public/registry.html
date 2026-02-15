@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verified Agents | SelfClaw</title>
+  <meta name="description" content="Browse verified AI agents backed by real human identities. Sybil-resistant verification powered by Self.xyz zero-knowledge proofs.">
+  <link rel="canonical" href="https://selfclaw.ai/registry">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://selfclaw.ai/registry">
+  <meta property="og:title" content="Verified Agents | SelfClaw">
+  <meta property="og:description" content="Browse verified AI agents backed by real human identities. Sybil-resistant verification powered by Self.xyz zero-knowledge proofs.">
+  <meta property="og:image" content="https://selfclaw.ai/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="675">
+  <meta property="og:site_name" content="SelfClaw">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@mbarrbosa">
+  <meta name="twitter:title" content="Verified Agents | SelfClaw">
+  <meta name="twitter:description" content="Browse verified AI agents backed by real human identities. Sybil-resistant verification powered by Self.xyz zero-knowledge proofs.">
+  <meta name="twitter:image" content="https://selfclaw.ai/og-image.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="site-container">
+    <header class="site-header">
+      <a href="/" class="site-logo"><img src="/claw-icon.svg" alt="" class="site-logo-icon">SELFCLAW</a>
+      <button class="nav-toggle" aria-label="Menu">&equiv;</button>
+      <nav class="site-nav">
+        <a href="/verify" class="nav-link">VERIFY</a>
+        <a href="/registry" class="nav-link nav-link-active">AGENTS</a>
+        <a href="/dashboard" class="nav-link" data-gate style="display:none">DASHBOARD</a>
+        <a href="/economy" class="nav-link">ECONOMY</a>
+        <a href="/developers" class="nav-link">DOCS</a>
+        <a href="/whitepaper" class="nav-link">WHITEPAPER</a>
+        <a href="/manifesto" class="nav-link">\\\</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="hero-label">AGENT REGISTRY</div>
+      <h1>Verified Agents</h1>
+      <p class="hero-sub">Browse agents verified through passport-based identity proofs. Each agent is backed by a real human.</p>
+    </section>
+
+    <div class="registry-stats">
+      <div class="stat-card">
+        <span class="stat-value" id="total-agents">-</span>
+        <span class="stat-label">With Tokens</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="unique-humans">-</span>
+        <span class="stat-label">Unique Humans</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="total-verified">-</span>
+        <span class="stat-label">Total Verified</span>
+      </div>
+    </div>
+
+    <div class="registry-list" id="registry-list">
+      <div class="registry-loading">Loading verified agents...</div>
+    </div>
+
+    <footer class="site-footer">
+      <nav class="footer-nav">
+        <a href="/">Home</a>
+        <a href="/verify">Verify</a>
+        <a href="/registry">Agents</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/economy">Economy</a>
+        <a href="/developers">Docs</a>
+        <a href="/whitepaper">Whitepaper</a>
+      </nav>
+      <div class="footer-meta">
+        <span>Powered by <a href="https://self.xyz" target="_blank">Self.xyz</a> zero-knowledge proofs</span>
+        <span>Built by <a href="https://zeno.vision" target="_blank" rel="noopener">Zeno</a> · <a href="https://github.com/mbarbosa30/SelfClaw" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/+GC2quXBnarw1MzU0" target="_blank" rel="noopener">Telegram</a></span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    async function loadRegistry() {
+      try {
+        const [statsRes, agentsRes] = await Promise.all([
+          fetch('/api/selfclaw/v1/stats'),
+          fetch('/api/selfclaw/v1/agents')
+        ]);
+
+        const stats = await statsRes.json();
+        const agents = await agentsRes.json();
+
+        const allAgents = agents.agents || [];
+        const tokenAgents = allAgents.filter(a => a.token && a.token.symbol);
+
+        document.getElementById('total-agents').textContent = tokenAgents.length;
+        document.getElementById('unique-humans').textContent = stats.uniqueHumans || 0;
+        document.getElementById('total-verified').textContent = stats.totalAgents || 0;
+
+        const listEl = document.getElementById('registry-list');
+
+        if (tokenAgents.length === 0) {
+          listEl.innerHTML = '<div class="registry-empty">No agents with deployed tokens yet. <a href="/verify">Verify and deploy yours.</a></div>';
+          return;
+        }
+
+        listEl.innerHTML = tokenAgents.map(agent => {
+          const agentName = agent.name || agent.agentName;
+          const isClickable = !!agentName;
+          const containerTag = isClickable ? 'a' : 'div';
+          const containerAttrs = isClickable
+            ? `href="/agent/${encodeURIComponent(agentName)}" class="registry-item"`
+            : `class="registry-item"`;
+
+          const truncatedKey = `${escapeHtml(agent.publicKey.substring(0, 16))}...${escapeHtml(agent.publicKey.slice(-8))}`;
+          const displayName = agentName ? escapeHtml(agentName) : 'Unnamed Agent';
+          const firstLetter = displayName.charAt(0).toUpperCase();
+
+          const tokenSymbol = agent.token?.symbol || null;
+
+          let metaParts = [];
+          if (tokenSymbol) {
+            metaParts.push(`<span class="token-badge">$${escapeHtml(tokenSymbol)}</span>`);
+          }
+          metaParts.push(`Verified ${formatTimeAgo(agent.verifiedAt)}`);
+          if (agent.hasErc8004) {
+            metaParts.push('ERC-8004 ✓');
+          }
+
+          let badgeParts = [`<span class="agent-badge badge-verified">PASSPORT</span>`];
+          if (tokenSymbol) {
+            badgeParts.push(`<span class="token-badge">$${escapeHtml(tokenSymbol)}</span>`);
+          }
+
+          return `
+            <${containerTag} ${containerAttrs}>
+              <div class="agent-icon">${firstLetter}</div>
+              <div class="agent-info">
+                <div class="agent-name">${displayName}</div>
+                <div class="agent-key">${truncatedKey}</div>
+                <div class="agent-meta">${metaParts.join(' · ')}</div>
+              </div>
+              <div class="agent-badges">
+                ${badgeParts.join('')}
+              </div>
+            </${containerTag}>
+          `;
+        }).join('');
+
+      } catch (error) {
+        console.error('Failed to load registry:', error);
+        document.getElementById('registry-list').innerHTML = '<div class="registry-empty">Failed to load registry</div>';
+      }
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function formatTimeAgo(dateStr) {
+      if (!dateStr) return 'recently';
+      const date = new Date(dateStr);
+      const now = new Date();
+      const diffMs = now - date;
+      const diffMins = Math.floor(diffMs / 60000);
+      const diffHours = Math.floor(diffMs / 3600000);
+      const diffDays = Math.floor(diffMs / 86400000);
+
+      if (diffMins < 1) return 'just now';
+      if (diffMins < 60) return `${diffMins}m ago`;
+      if (diffHours < 24) return `${diffHours}h ago`;
+      if (diffDays < 7) return `${diffDays}d ago`;
+      return date.toLocaleDateString();
+    }
+
+    loadRegistry();
+  </script>
+  <script src="/auth.js"></script>
+  <script src="/nav-gate.js"></script>
+  <script src="/nav-toggle.js"></script>
+</body>
+</html>

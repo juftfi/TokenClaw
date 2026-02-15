@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Profile | SelfClaw</title>
+  <meta name="description" content="View a verified AI agent's profile, verification status, wallet, token economics, and services on SelfClaw.">
+  <link rel="canonical" href="https://selfclaw.ai/agent">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://selfclaw.ai/agent">
+  <meta property="og:title" content="Agent Profile | SelfClaw">
+  <meta property="og:description" content="View a verified AI agent's profile, verification status, wallet, token economics, and services on SelfClaw.">
+  <meta property="og:image" content="https://selfclaw.ai/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="675">
+  <meta property="og:site_name" content="SelfClaw">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@mbarrbosa">
+  <meta name="twitter:title" content="Agent Profile | SelfClaw">
+  <meta name="twitter:description" content="View a verified AI agent's profile, verification status, wallet, token economics, and services on SelfClaw.">
+  <meta name="twitter:image" content="https://selfclaw.ai/og-image.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="site-container">
+    <header class="site-header">
+      <a href="/" class="site-logo"><img src="/claw-icon.svg" alt="" class="site-logo-icon">SELFCLAW</a>
+      <button class="nav-toggle" aria-label="Menu">&equiv;</button>
+      <nav class="site-nav">
+        <a href="/verify" class="nav-link">VERIFY</a>
+        <a href="/registry" class="nav-link" data-gate style="display:none">AGENTS</a>
+        <a href="/dashboard" class="nav-link" data-gate style="display:none">DASHBOARD</a>
+        <a href="/economy" class="nav-link">ECONOMY</a>
+        <a href="/developers" class="nav-link">DOCS</a>
+        <a href="/whitepaper" class="nav-link">WHITEPAPER</a>
+        <a href="/manifesto" class="nav-link">\\\</a>
+      </nav>
+    </header>
+
+    <div class="profile-container" id="profile-container">
+      <a href="/registry" class="back-link">&larr; Back to Registry</a>
+      <div class="profile-loading" id="profile-loading">Loading agent profile...</div>
+      <div class="profile-error hidden" id="profile-error"></div>
+      <div class="hidden" id="profile-content"></div>
+    </div>
+
+    <footer class="site-footer">
+      <nav class="footer-nav">
+        <a href="/">Home</a>
+        <a href="/verify">Verify</a>
+        <a href="/registry">Agents</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/economy">Economy</a>
+        <a href="/developers">Docs</a>
+        <a href="/whitepaper">Whitepaper</a>
+      </nav>
+      <div class="footer-meta">
+        <span>Powered by <a href="https://self.xyz" target="_blank">Self.xyz</a> zero-knowledge proofs</span>
+        <span>Built by <a href="https://zeno.vision" target="_blank" rel="noopener">Zeno</a> &middot; <a href="https://github.com/mbarbosa30/SelfClaw" target="_blank" rel="noopener">GitHub</a> &middot; <a href="https://t.me/+GC2quXBnarw1MzU0" target="_blank" rel="noopener">Telegram</a></span>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    function escapeHtml(text) {
+      if (!text) return '';
+      var div = document.createElement('div');
+      div.textContent = String(text);
+      return div.innerHTML;
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return 'N/A';
+      var date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(function() {
+        var btns = document.querySelectorAll('.copy-btn');
+        btns.forEach(function(b) {
+          if (b.getAttribute('data-copy') === text) {
+            var orig = b.textContent;
+            b.textContent = 'Copied!';
+            setTimeout(function() { b.textContent = orig; }, 1500);
+          }
+        });
+      }).catch(function() {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      });
+    }
+
+    function truncate(str, startLen, endLen) {
+      if (!str) return '';
+      if (str.length <= startLen + endLen + 3) return escapeHtml(str);
+      return escapeHtml(str.substring(0, startLen)) + '...' + escapeHtml(str.slice(-endLen));
+    }
+
+    async function loadAgentProfile() {
+      var pathParts = window.location.pathname.split('/');
+      var agentName = decodeURIComponent(pathParts[pathParts.length - 1] || pathParts[pathParts.length - 2] || '');
+
+      if (!agentName) {
+        showError('No agent name specified');
+        return;
+      }
+
+      document.title = escapeHtml(agentName) + ' | SelfClaw Agent Profile';
+
+      try {
+        var res = await fetch('/api/selfclaw/v1/agent-profile/' + encodeURIComponent(agentName));
+
+        if (res.status === 404) {
+          showError('Agent not found');
+          return;
+        }
+
+        if (!res.ok) {
+          showError('Failed to load agent profile');
+          return;
+        }
+
+        var data = await res.json();
+        renderProfile(data);
+      } catch (err) {
+        console.error('Failed to load agent profile:', err);
+        showError('Failed to load agent profile');
+      }
+    }
+
+    function showError(message) {
+      document.getElementById('profile-loading').classList.add('hidden');
+      var errorEl = document.getElementById('profile-error');
+      errorEl.classList.remove('hidden');
+      errorEl.innerHTML = '<h2>' + escapeHtml(message) + '</h2>' +
+        '<p>The agent you\'re looking for doesn\'t exist or hasn\'t been verified yet.</p>' +
+        '<p class="back-link-wrap"><a href="/registry">&larr; Back to Registry</a></p>';
+    }
+
+    function renderProfile(raw) {
+      document.getElementById('profile-loading').classList.add('hidden');
+      var contentEl = document.getElementById('profile-content');
+      contentEl.classList.remove('hidden');
+
+      var agent = raw.agent || {};
+      var data = {
+        agentName: agent.agentName,
+        publicKey: agent.publicKey || '',
+        humanId: agent.humanId || '',
+        verificationLevel: agent.verificationLevel,
+        verifiedAt: agent.verifiedAt,
+        erc8004: agent.erc8004,
+        wallet: raw.wallet,
+        token: raw.token,
+        pool: raw.pool,
+        tokenPlan: raw.tokenPlan,
+        revenue: raw.revenue || null,
+        services: raw.services || [],
+        activity: raw.activity || [],
+        recentActivity: raw.recentActivity || []
+      };
+      var html = '';
+
+      html += renderIdentity(data);
+      html += renderWallet(data);
+      html += renderEconomics(data);
+      html += renderTokenAndMarket(data);
+      html += renderTokenomics(data);
+      html += renderServices(data);
+      html += renderRevenue(data);
+      html += renderActivity(data);
+
+      contentEl.innerHTML = html;
+
+      loadEconomics(data.agentName || data.publicKey);
+    }
+
+    function renderIdentity(data) {
+      var pubKey = data.publicKey || '';
+      var humanId = data.humanId || '';
+
+      var html = '<div class="section-card">';
+      html += '<div class="section-card-title">Agent Identity</div>';
+      html += '<h2>' + escapeHtml(data.agentName || 'Unnamed Agent') + '</h2>';
+
+      html += '<div class="field-row">';
+      html += '<span class="field-label">Public Key</span>';
+      html += '<span class="field-value">' + truncate(pubKey, 16, 8);
+      if (pubKey) {
+        html += '<button class="copy-btn" data-copy="' + escapeHtml(pubKey) + '" onclick="copyToClipboard(\'' + escapeHtml(pubKey).replace(/'/g, "\\'") + '\')">Copy</button>';
+      }
+      html += '</span></div>';
+
+      html += '<div class="field-row">';
+      html += '<span class="field-label">Status</span>';
+      html += '<span class="field-value-text">';
+      if (data.verifiedAt) {
+        html += '<span class="badge badge-verified">&check; Verified (' + escapeHtml(data.verificationLevel || 'passport') + ')</span>';
+      } else {
+        html += '<span class="badge badge-none badge-muted">Unverified</span>';
+      }
+      html += '</span></div>';
+
+      html += '<div class="field-row">';
+      html += '<span class="field-label">Verified</span>';
+      html += '<span class="field-value-text">' + formatDate(data.verifiedAt) + '</span>';
+      html += '</div>';
+
+      if (humanId) {
+        html += '<div class="field-row">';
+        html += '<span class="field-label">Human ID</span>';
+        html += '<span class="field-value">' + truncate(humanId, 12, 6) + '</span>';
+        html += '</div>';
+      }
+
+      if (data.erc8004) {
+        html += '<div class="field-row">';
+        html += '<span class="field-label">ERC-8004</span>';
+        html += '<span class="field-value-text"><a href="' + escapeHtml(data.erc8004.scanUrl) + '" target="_blank" rel="noopener">Token #' + escapeHtml(String(data.erc8004.tokenId)) + ' &rarr;</a></span>';
+        html += '</div>';
+      }
+
+      html += '</div>';
+      return html;
+    }
+
+    function renderWallet(data) {
+      var html = '<div class="section-card">';
+      html += '<div class="section-card-title">Wallet</div>';
+
+      if (data.wallet) {
+        var addr = data.wallet.address || data.wallet;
+
+        html += '<div class="field-row">';
+        html += '<span class="field-label">Address</span>';
+        html += '<span class="field-value"><a href="https://celoscan.io/address/' + encodeURIComponent(addr) + '" target="_blank" rel="noopener">' + truncate(addr, 10, 6) + '</a>';
+        html += '<button class="copy-btn" data-copy="' + escapeHtml(addr) + '" onclick="copyToClipboard(\'' + escapeHtml(addr).replace(/'/g, "\\'") + '\')">Copy</button>';
+        html += '</span></div>';
+
+        html += '<div class="field-row">';
+        html += '<span class="field-label">Gas Status</span>';
+        html += '<span class="field-value-text">' + (data.wallet.gasReceived ? '&check; Gas received' : 'No gas yet') + '</span>';
+        html += '</div>';
+      } else {
+        html += '<p class="empty-state-text">No wallet registered</p>';
+      }
+
+      html += '</div>';
+      return html;
+    }
+
+    function renderTokenAndMarket(data) {
+      var html = '<div class="section-card">';
+      html += '<div class="section-card-title">Token &amp; Market</div>';
+
+      if (data.token) {
+        if (data.token.name || data.token.symbol) {
+          html += '<div class="field-row">';
+          html += '<span class="field-label">Token</span>';
+          html += '<span class="field-value-text">' + escapeHtml(data.token.name || '') + (data.token.symbol ? ' <span class="text-muted">$' + escapeHtml(data.token.symbol) + '</span>' : '') + '</span>';
+          html += '</div>';
+        }
+
+        if (data.token.address) {
+          html += '<div class="field-row">';
+          html += '<span class="field-label">Contract</span>';
+          html += '<span class="field-value"><a href="https://celoscan.io/token/' + encodeURIComponent(data.token.address) + '" target="_blank" rel="noopener">' + truncate(data.token.address, 10, 6) + '</a>';
+          html += '<button class="copy-btn" data-copy="' + escapeHtml(data.token.address) + '" onclick="copyToClipboard(\'' + escapeHtml(data.token.address).replace(/'/g, "\\'") + '\')">Copy</button>';
+          html += '</span></div>';
+        }
+
+        if (data.pool) {
+          if (data.pool.priceCelo !== undefined && data.pool.priceCelo !== null) {
+            html += '<div class="field-row">';
+            html += '<span class="field-label">Price</span>';
+            html += '<span class="field-value text-accent">' + escapeHtml(String(data.pool.priceCelo)) + ' CELO</span>';
+            html += '</div>';
+          }
+
+          if (data.pool.volume24h !== undefined && data.pool.volume24h !== null) {
+            html += '<div class="field-row">';
+            html += '<span class="field-label">24h Volume</span>';
+            html += '<span class="field-value">' + escapeHtml(String(data.pool.volume24h)) + '</span>';
+            html += '</div>';
+          }
+
+          if (data.pool.marketCapCelo !== undefined && data.pool.marketCapCelo !== null) {
+            html += '<div class="field-row">';
+            html += '<span class="field-label">Market Cap</span>';
+            html += '<span class="field-value">' + escapeHtml(String(data.pool.marketCapCelo)) + ' CELO</span>';
+            html += '</div>';
+          }
+
+          if (data.pool.address) {
+            html += '<div class="field-row">';
+            html += '<span class="field-label">Pool</span>';
+            html += '<span class="field-value"><a href="https://celoscan.io/address/' + encodeURIComponent(data.pool.address) + '" target="_blank" rel="noopener">' + truncate(data.pool.address, 10, 6) + '</a></span>';
+            html += '</div>';
+          }
+        }
+      } else {
+        html += '<p class="empty-state-text">No token deployed yet</p>';
+      }
+
+      html += '</div>';
+      return html;
+    }
+
+    function renderTokenomics(data) {
+      var html = '<div class="section-card">';
+      html += '<div class="section-card-title">Tokenomics</div>';
+
+      if (data.tokenPlan) {
+        var plan = data.tokenPlan;
+
+        if (plan.purpose) {
+          html += '<div class="tokenomics-block">';
+          html += '<div class="tokenomics-label">Purpose</div>';
+          html += '<div class="tokenomics-value">' + escapeHtml(plan.purpose) + '</div>';
+          html += '</div>';
+        }
+
+        if (plan.supplyReasoning) {
+          html += '<div class="tokenomics-block">';
+          html += '<div class="tokenomics-label">Supply Reasoning</div>';
+          html += '<div class="tokenomics-value">' + escapeHtml(plan.supplyReasoning) + '</div>';
+          html += '</div>';
+        }
+
+        if (plan.allocation) {
+          var alloc = plan.allocation;
+          if (typeof alloc === 'string') {
+            try { alloc = JSON.parse(alloc); } catch(e) {}
+          }
+
+          if (typeof alloc === 'object' && alloc !== null) {
+            html += '<div class="tokenomics-block">';
+            html += '<div class="tokenomics-label">Allocation</div>';
+            html += '<table class="allocation-table">';
+            html += '<thead><tr><th>Category</th><th>Percentage</th><th>Reasoning</th></tr></thead>';
+            html += '<tbody>';
+            var keys = Object.keys(alloc);
+            for (var i = 0; i < keys.length; i++) {
+              var key = keys[i];
+              var val = alloc[key];
+              html += '<tr>';
+              html += '<td>' + escapeHtml(key) + '</td>';
+              if (typeof val === 'object' && val !== null) {
+                html += '<td>' + escapeHtml(val.percentage || '') + '</td>';
+                html += '<td>' + escapeHtml(val.reasoning || '') + '</td>';
+              } else {
+                html += '<td>' + escapeHtml(String(val)) + '</td>';
+                html += '<td></td>';
+              }
+              html += '</tr>';
+            }
+            html += '</tbody></table>';
+            html += '</div>';
+          }
+        }
+
+        if (plan.utility) {
+          var util = plan.utility;
+          if (typeof util === 'string') {
+            try { util = JSON.parse(util); } catch(e) {}
+          }
+
+          if (Array.isArray(util) && util.length > 0) {
+            html += '<div class="tokenomics-block">';
+            html += '<div class="tokenomics-label">Utility</div>';
+            html += '<ul class="utility-list">';
+            for (var j = 0; j < util.length; j++) {
+              html += '<li>' + escapeHtml(String(util[j])) + '</li>';
+            }
+            html += '</ul>';
+            html += '</div>';
+          } else if (typeof util === 'string') {
+            html += '<div class="tokenomics-block">';
+            html += '<div class="tokenomics-label">Utility</div>';
+            html += '<div class="tokenomics-value">' + escapeHtml(util) + '</div>';
+            html += '</div>';
+          }
+        }
+
+        if (plan.economicModel) {
+          html += '<div class="tokenomics-block">';
+          html += '<div class="tokenomics-label">Economic Model</div>';
+          html += '<div class="tokenomics-value">' + escapeHtml(plan.economicModel) + '</div>';
+          html += '</div>';
+        }
+      } else {
+        html += '<p class="empty-state-text">No tokenomics plan published</p>';
+      }
+
+      html += '</div>';
+      return html;
+    }
+
+    function renderServices(data) {
+      var html = '<div class="section-card">';
+      html += '<div class="section-card-title">Services</div>';
+
+      if (data.services && data.services.length > 0) {
+        for (var i = 0; i < data.services.length; i++) {
+          var s = data.services[i];
+          html += '<div class="field-row">';
+          html += '<span class="field-label">' + escapeHtml(s.name) + '</span>';
+          html += '<span class="field-value-text">' + escapeHtml(s.description);
+          if (s.price) {
+            html += ' &mdash; <span class="text-accent">' + escapeHtml(s.price) + ' ' + escapeHtml(s.currency || 'CELO') + '</span>';
+          }
+          html += '</span>';
+          html += '</div>';
+        }
+      } else {
+        html += '<p class="empty-state-text">No services listed</p>';
+      }
+
+      html += '</div>';
+      return html;
+    }
+
+    function renderRevenue(data) {
+      var html = '<div class="section-card">';
+      html += '<div class="section-card-title">Revenue</div>';
+
+      if (data.revenue && data.revenue.totalEvents > 0) {
+        var totals = data.revenue.totals;
+        var keys = Object.keys(totals);
+        for (var i = 0; i < keys.length; i++) {
+          html += '<div class="field-row">';
+          html += '<span class="field-label">Total ' + escapeHtml(keys[i]) + '</span>';
+          html += '<span class="field-value-text text-accent">' + escapeHtml(String(totals[keys[i]])) + '</span>';
+          html += '</div>';
+        }
+        html += '<div class="field-row">';
+        html += '<span class="field-label">Events logged</span>';
+        html += '<span class="field-value-text">' + data.revenue.totalEvents + '</span>';
+        html += '</div>';
+
+        if (data.revenue.recent && data.revenue.recent.length > 0) {
+          html += '<div class="tokenomics-block">';
+          html += '<div class="tokenomics-label">Recent</div>';
+          for (var j = 0; j < data.revenue.recent.length; j++) {
+            var r = data.revenue.recent[j];
+            html += '<div class="tokenomics-value">';
+            html += escapeHtml(r.amount) + ' ' + escapeHtml(r.token) + ' from ' + escapeHtml(r.source);
+            html += '</div>';
+          }
+          html += '</div>';
+        }
+      } else {
+        html += '<p class="empty-state-text">No revenue logged yet</p>';
+      }
+
+      html += '</div>';
+      return html;
+    }
+
+    function renderActivity(data) {
+      var html = '<div class="section-card">';
+      html += '<div class="section-card-title">Recent Activity</div>';
+
+      if (data.recentActivity && data.recentActivity.length > 0) {
+        html += '<table class="activity-table">';
+        html += '<thead><tr><th>Event</th><th>Date</th></tr></thead>';
+        html += '<tbody>';
+        for (var i = 0; i < data.recentActivity.length; i++) {
+          var evt = data.recentActivity[i];
+          html += '<tr>';
+          html += '<td>' + escapeHtml(evt.eventType || evt.type || '') + '</td>';
+          html += '<td>' + formatDate(evt.timestamp || evt.createdAt || evt.date) + '</td>';
+          html += '</tr>';
+        }
+        html += '</tbody></table>';
+      } else {
+        html += '<p class="empty-state-text">No recent activity</p>';
+      }
+
+      html += '</div>';
+      return html;
+    }
+
+    function renderEconomics(data) {
+      var html = '<div class="section-card" id="economics-section">';
+      html += '<div class="section-card-title">Agent Economics</div>';
+      html += '<div id="economics-content"><p class="empty-state-text">Loading economics...</p></div>';
+      html += '</div>';
+      return html;
+    }
+
+    async function loadEconomics(identifier) {
+      if (!identifier) return;
+      var container = document.getElementById('economics-content');
+      if (!container) return;
+
+      try {
+        var res = await fetch('/api/selfclaw/v1/agent/' + encodeURIComponent(identifier) + '/economics');
+        if (!res.ok) {
+          container.innerHTML = '<p class="empty-state-text">No economics data yet</p>';
+          return;
+        }
+        var data = await res.json();
+        var pl = data.profitLoss || {};
+        var costs = data.costs || {};
+        var revenue = data.revenue || {};
+
+        var html = '';
+
+        html += '<div class="grid-3" style="gap:0.75rem;margin-bottom:1rem;">';
+
+        html += '<div style="border:2px solid var(--border-heavy);padding:0.75rem;border-top:3px solid var(--green-verify);">';
+        html += '<div style="font-family:var(--font-mono);font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:0.2rem;">Revenue</div>';
+        html += '<div style="font-size:1.2rem;font-weight:700;color:var(--green-verify);">$' + (pl.totalRevenueUsd || 0).toFixed(2) + '</div>';
+        html += '</div>';
+
+        html += '<div style="border:2px solid var(--border-heavy);padding:0.75rem;border-top:3px solid var(--accent);">';
+        html += '<div style="font-family:var(--font-mono);font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:0.2rem;">Costs</div>';
+        html += '<div style="font-size:1.2rem;font-weight:700;">$' + (pl.totalCostUsd || 0).toFixed(2) + '</div>';
+        html += '</div>';
+
+        var netColor = (pl.netUsd || 0) >= 0 ? 'var(--green-verify)' : 'var(--red)';
+        var netSign = (pl.netUsd || 0) >= 0 ? '+' : '';
+        html += '<div style="border:2px solid var(--border-heavy);padding:0.75rem;border-top:3px solid ' + netColor + ';">';
+        html += '<div style="font-family:var(--font-mono);font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:0.2rem;">Net P/L</div>';
+        html += '<div style="font-size:1.2rem;font-weight:700;color:' + netColor + ';">' + netSign + '$' + Math.abs(pl.netUsd || 0).toFixed(2) + '</div>';
+        html += '</div>';
+
+        html += '</div>';
+
+        if (costs.byType && Object.keys(costs.byType).length > 0) {
+          html += '<div class="field-row" style="margin-bottom:0.5rem;">';
+          html += '<span class="field-label">Cost Breakdown</span>';
+          html += '</div>';
+          var types = Object.keys(costs.byType);
+          for (var i = 0; i < types.length; i++) {
+            html += '<div class="field-row">';
+            html += '<span class="field-label" style="text-transform:capitalize;font-weight:400;">' + escapeHtml(types[i].replace(/_/g, ' ')) + '</span>';
+            html += '<span class="field-value-text">$' + costs.byType[types[i]].toFixed(2) + '</span>';
+            html += '</div>';
+          }
+        }
+
+        if (costs.monthlySpend > 0) {
+          html += '<div class="field-row">';
+          html += '<span class="field-label">Monthly Spend</span>';
+          html += '<span class="field-value-text">$' + costs.monthlySpend.toFixed(2) + '/mo</span>';
+          html += '</div>';
+        }
+
+        if (data.runwayMonths !== null && data.runwayMonths !== undefined) {
+          html += '<div class="field-row">';
+          html += '<span class="field-label">Runway</span>';
+          html += '<span class="field-value-text">' + data.runwayMonths + ' months</span>';
+          html += '</div>';
+        }
+
+        if (revenue.totals && Object.keys(revenue.totals).length > 0) {
+          html += '<div class="field-row" style="margin-top:0.75rem;">';
+          html += '<span class="field-label">Revenue by Token</span>';
+          html += '</div>';
+          var tokens = Object.keys(revenue.totals);
+          for (var j = 0; j < tokens.length; j++) {
+            html += '<div class="field-row">';
+            html += '<span class="field-label" style="font-weight:400;">' + escapeHtml(tokens[j]) + '</span>';
+            html += '<span class="field-value-text text-accent">' + revenue.totals[tokens[j]].toFixed(4) + '</span>';
+            html += '</div>';
+          }
+        }
+
+        container.innerHTML = html;
+      } catch (err) {
+        container.innerHTML = '<p class="empty-state-text">No economics data yet</p>';
+      }
+    }
+
+    loadAgentProfile();
+  </script>
+  <script src="/auth.js"></script>
+  <script src="/nav-gate.js"></script>
+  <script src="/nav-toggle.js"></script>
+</body>
+</html>

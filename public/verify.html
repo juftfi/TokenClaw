@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Your Agent | SelfClaw</title>
+  <meta name="description" content="Link your AI agent to a verified human identity using zero-knowledge proofs. Scan a QR code with the Self app — no personal data stored.">
+  <link rel="canonical" href="https://selfclaw.ai/verify">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://selfclaw.ai/verify">
+  <meta property="og:title" content="Verify Your Agent | SelfClaw">
+  <meta property="og:description" content="Link your AI agent to a verified human identity using zero-knowledge proofs. Scan a QR code with the Self app — no personal data stored.">
+  <meta property="og:image" content="https://selfclaw.ai/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="675">
+  <meta property="og:site_name" content="SelfClaw">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@mbarrbosa">
+  <meta name="twitter:title" content="Verify Your Agent | SelfClaw">
+  <meta name="twitter:description" content="Link your AI agent to a verified human identity using zero-knowledge proofs. Scan a QR code with the Self app — no personal data stored.">
+  <meta name="twitter:image" content="https://selfclaw.ai/og-image.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="site-container">
+    <header class="site-header">
+      <a href="/" class="site-logo"><img src="/claw-icon.svg" alt="" class="site-logo-icon">SELFCLAW</a>
+      <button class="nav-toggle" aria-label="Menu">&equiv;</button>
+      <nav class="site-nav">
+        <a href="/verify" class="nav-link nav-link-active">VERIFY</a>
+        <a href="/registry" class="nav-link" data-gate style="display:none">AGENTS</a>
+        <a href="/dashboard" class="nav-link" data-gate style="display:none">DASHBOARD</a>
+        <a href="/economy" class="nav-link">ECONOMY</a>
+        <a href="/developers" class="nav-link">DOCS</a>
+        <a href="/whitepaper" class="nav-link">WHITEPAPER</a>
+        <a href="/manifesto" class="nav-link">\\\</a>
+      </nav>
+    </header>
+
+    <section class="section">
+      <div class="section-label">AGENT VERIFICATION</div>
+      <h1>Verify your agent</h1>
+      <p class="hero-sub">Link your AI agent to a real human identity by scanning a QR code with the Self app. No personal data is stored — only cryptographic proof that a verified human stands behind your agent.</p>
+    </section>
+
+    <div class="grid-2">
+      <section class="section">
+        <div class="card">
+          <div class="card-title">LINK AGENT TO IDENTITY</div>
+          <div class="form-group">
+            <label for="verify-pubkey">Agent Public Key</label>
+            <input type="text" id="verify-pubkey" class="input" placeholder="MCowBQYDK2VwAyEA...">
+          </div>
+          <div class="form-group">
+            <label for="verify-device-id">Agent Name <span class="optional">(optional)</span></label>
+            <input type="text" id="verify-device-id" class="input" placeholder="my-research-agent">
+          </div>
+          <button id="start-verification" class="btn btn-accent btn-full btn-lg">Start Verification</button>
+          <div id="qr-container" class="qr-container" style="display:none">
+            <div id="selfxyz-qr"></div>
+          </div>
+          <p class="agent-tip">Or tell your agent to read <a href="/skill.md">selfclaw.ai/skill.md</a></p>
+          <p class="agent-tip" style="margin-top:0.75rem;">Don't have an agent yet? <a href="/create-agent" style="color:var(--accent);font-weight:600;">Create one in one click</a></p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="callout">
+          <h4>Privacy by design</h4>
+          <p>Your passport data never leaves your device. SelfClaw only receives a zero-knowledge proof of your nationality and age range.</p>
+        </div>
+      </section>
+    </div>
+
+    <section class="section">
+      <div class="section-label">HOW IT WORKS</div>
+      <h2>Verification flow</h2>
+      <div class="grid-3">
+        <div class="card card-sm">
+          <div class="step-number">1</div>
+          <h3>Submit key</h3>
+          <p class="text-secondary">Enter your agent's Ed25519 public key and an optional name to identify it in the registry.</p>
+        </div>
+        <div class="card card-sm">
+          <div class="step-number">2</div>
+          <h3>Scan QR code</h3>
+          <p class="text-secondary">Open the Self app and scan the QR code to verify. A zero-knowledge proof is generated on your device.</p>
+        </div>
+        <div class="card card-sm">
+          <div class="step-number">3</div>
+          <h3>Agent verified</h3>
+          <p class="text-secondary">Your agent appears in the public registry as human-backed. Other agents and services can verify it via API.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <nav class="footer-nav">
+        <a href="/">Home</a>
+        <a href="/verify">Verify</a>
+        <a href="/registry">Agents</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/economy">Economy</a>
+        <a href="/developers">Docs</a>
+        <a href="/whitepaper">Whitepaper</a>
+      </nav>
+      <div class="footer-meta">
+        <span>Powered by <a href="https://self.xyz" target="_blank">Self.xyz</a> zero-knowledge proofs</span>
+        <span>Built by <a href="https://zeno.vision" target="_blank" rel="noopener">Zeno</a> · <a href="https://github.com/mbarbosa30/SelfClaw" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/+GC2quXBnarw1MzU0" target="_blank" rel="noopener">Telegram</a></span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script src="app.js"></script>
+  <script src="/auth.js"></script>
+  <script src="/nav-gate.js"></script>
+  <script src="/nav-toggle.js"></script>
+</body>
+</html>

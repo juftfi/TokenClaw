@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin | SelfClaw</title>
+  <meta name="description" content="SelfClaw admin dashboard for network management.">
+  <link rel="canonical" href="https://selfclaw.ai/admin">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://selfclaw.ai/admin">
+  <meta property="og:title" content="Admin | SelfClaw">
+  <meta property="og:description" content="SelfClaw admin dashboard for network management.">
+  <meta property="og:image" content="https://selfclaw.ai/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="675">
+  <meta property="og:site_name" content="SelfClaw">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@mbarrbosa">
+  <meta name="twitter:title" content="Admin | SelfClaw">
+  <meta name="twitter:description" content="SelfClaw admin dashboard for network management.">
+  <meta name="twitter:image" content="https://selfclaw.ai/og-image.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .admin-login-wrap {
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .admin-login-box {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+    .admin-login-box h2 {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: #E8E8E8;
+      margin-bottom: 1.5rem;
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .admin-login-box .input {
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .admin-login-error {
+      color: #ef4444;
+      font-size: 0.8rem;
+      margin-bottom: 1rem;
+      font-family: 'IBM Plex Mono', monospace;
+      display: none;
+    }
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #333;
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .admin-header h1 {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: #E8E8E8;
+    }
+    .logout-btn {
+      background: transparent;
+      border: 1px solid #444;
+      color: #aaa;
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .logout-btn:hover {
+      border-color: #ef4444;
+      color: #ef4444;
+    }
+    .admin-section {
+      margin-bottom: 2.5rem;
+    }
+    .admin-section-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #333;
+      color: #E8E8E8;
+    }
+    .wallet-overview {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .wallet-panel {
+      background: #0d0d0d;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+    .wallet-panel-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #FF6B4A;
+      margin-bottom: 1rem;
+    }
+    .wallet-addr {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      color: #777;
+      margin-bottom: 1rem;
+      word-break: break-all;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .wallet-addr a {
+      color: #777;
+      text-decoration: none;
+    }
+    .wallet-addr a:hover {
+      color: #FF6B4A;
+    }
+    .copy-btn {
+      background: transparent;
+      border: 1px solid #444;
+      color: #777;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.6rem;
+      cursor: pointer;
+      font-family: 'IBM Plex Mono', monospace;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .copy-btn:hover {
+      border-color: #FF6B4A;
+      color: #FF6B4A;
+    }
+    .balance-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    .balance-row:last-child {
+      border-bottom: none;
+    }
+    .balance-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      color: #aaa;
+      text-transform: uppercase;
+    }
+    .balance-value {
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #E8E8E8;
+    }
+    .bridge-status-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .bridge-status-card {
+      background: #0d0d0d;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+    .bridge-token-name {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #E8E8E8;
+      margin-bottom: 0.75rem;
+    }
+    .bridge-attested {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      margin-bottom: 0.5rem;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .status-dot.green { background: #4AFF6B; }
+    .status-dot.red { background: #ef4444; }
+    .status-dot.yellow { background: #FFD700; }
+    .wrapped-addr {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      color: #777;
+      word-break: break-all;
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .actions-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    .action-card {
+      background: #0d0d0d;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 1.25rem;
+    }
+    .action-card h4 {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #E8E8E8;
+      margin-bottom: 0.75rem;
+    }
+    .action-card .input {
+      margin-bottom: 0.75rem;
+      font-size: 0.8rem;
+      padding: 0.6rem 0.8rem;
+    }
+    .action-card textarea.input {
+      min-height: 80px;
+      font-size: 0.7rem;
+    }
+    .action-btn {
+      width: 100%;
+      padding: 0.5rem 1rem;
+      background: #FF6B4A;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .action-btn:hover {
+      background: #fff;
+    }
+    .action-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .action-result {
+      margin-top: 0.75rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      line-height: 1.5;
+      word-break: break-all;
+      max-height: 120px;
+      overflow-y: auto;
+    }
+    .action-result.success { color: #4AFF6B; }
+    .action-result.error { color: #ef4444; }
+    .action-result.loading { color: #FFD700; }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+    .stat-card {
+      background: #0d0d0d;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 1.5rem;
+      border-bottom: 2px solid #FF6B4A;
+    }
+    .stat-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #777;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    .stat-value {
+      font-family: 'Inter', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #E8E8E8;
+      line-height: 1;
+    }
+    .activity-log {
+      background: #0d0d0d;
+      border: 1px solid #333;
+      border-radius: 12px;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+    .log-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1.25rem;
+      border-bottom: 1px solid #1a1a1a;
+      font-size: 0.8rem;
+    }
+    .log-item:last-child {
+      border-bottom: none;
+    }
+    .log-type {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #FF6B4A;
+      min-width: 100px;
+      flex-shrink: 0;
+    }
+    .log-detail {
+      flex: 1;
+      color: #aaa;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .log-time {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      color: #555;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .log-empty {
+      padding: 2rem;
+      text-align: center;
+      color: #555;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.8rem;
+    }
+    .spinner {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border: 2px solid #333;
+      border-top-color: #FF6B4A;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    @keyframes bridgePulse {
+      0% { width: 5%; opacity: 0.7; }
+      50% { width: 60%; opacity: 1; }
+      100% { width: 5%; opacity: 0.7; }
+    }
+    .refresh-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .refresh-info span {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      color: #555;
+    }
+    .refresh-btn {
+      background: transparent;
+      border: 1px solid #444;
+      color: #aaa;
+      padding: 0.35rem 0.8rem;
+      border-radius: 100px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .refresh-btn:hover {
+      border-color: #FF6B4A;
+      color: #FF6B4A;
+    }
+    @media (max-width: 768px) {
+      .wallet-overview,
+      .bridge-status-grid {
+        grid-template-columns: 1fr;
+      }
+      .actions-grid {
+        grid-template-columns: 1fr;
+      }
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div id="login-view" class="admin-login-wrap">
+      <div class="admin-login-box">
+        <h2>SELFCLAW ADMIN</h2>
+        <div id="login-error" class="admin-login-error"></div>
+        <input type="password" id="login-password" class="input" placeholder="Admin password" onkeydown="if(event.key==='Enter')doLogin()">
+        <button class="btn" style="width:100%;margin-top:0.5rem;" onclick="doLogin()">Login</button>
+      </div>
+    </div>
+
+    <div id="dashboard-view" style="display:none;">
+
+      <header class="admin-header">
+        <h1>SELFCLAW ADMIN</h1>
+        <button class="logout-btn" onclick="doLogout()">Logout</button>
+      </header>
+
+      <div class="refresh-info">
+        <span id="last-refresh">Loading...</span>
+        <button class="refresh-btn" onclick="refreshAll()">Refresh</button>
+      </div>
+
+      <section class="admin-section">
+        <h2 class="admin-section-title">Registry Stats</h2>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-label">Verified Agents</span>
+            <span class="stat-value" id="stat-verified">&mdash;</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Wallets Created</span>
+            <span class="stat-value" id="stat-wallets">&mdash;</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Gas Sent</span>
+            <span class="stat-value" id="stat-gas">&mdash;</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Tokens Deployed</span>
+            <span class="stat-value" id="stat-tokens">&mdash;</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="admin-section">
+        <h2 class="admin-section-title">Token Prices</h2>
+        <div id="prices-loading" style="text-align:center;padding:2rem;color:#555;"><span class="spinner"></span> Loading prices...</div>
+        <div id="prices-content" style="display:none;">
+          <div class="wallet-overview">
+            <div class="wallet-panel" style="border-bottom:2px solid #FF6B4A;">
+              <div class="wallet-panel-title">SELFCLAW on Base</div>
+              <div style="display:flex;align-items:baseline;gap:0.5rem;margin-bottom:0.5rem;">
+                <span style="font-size:1.8rem;font-weight:700;color:#E8E8E8;" id="price-base-usd">--</span>
+                <span style="font-size:0.8rem;color:#777;">USD</span>
+              </div>
+              <div id="price-base-change" style="font-size:0.8rem;margin-bottom:0.75rem;"></div>
+              <div class="balance-row">
+                <span class="balance-label">Native Price</span>
+                <span class="balance-value" id="price-base-native" style="font-size:0.85rem;">--</span>
+              </div>
+              <div class="balance-row">
+                <span class="balance-label">Liquidity</span>
+                <span class="balance-value" id="price-base-liq" style="font-size:0.85rem;">--</span>
+              </div>
+              <div class="balance-row">
+                <span class="balance-label">24h Volume</span>
+                <span class="balance-value" id="price-base-vol" style="font-size:0.85rem;">--</span>
+              </div>
+              <div class="balance-row">
+                <span class="balance-label">DEX</span>
+                <span class="balance-value" id="price-base-dex" style="font-size:0.85rem;">--</span>
+              </div>
+              <div id="price-base-link" style="margin-top:0.5rem;"></div>
+            </div>
+            <div class="wallet-panel" style="border-bottom:2px solid #4AFF6B;">
+              <div class="wallet-panel-title">SELFCLAW on Celo</div>
+              <div style="display:flex;align-items:baseline;gap:0.5rem;margin-bottom:0.5rem;">
+                <span style="font-size:1.8rem;font-weight:700;color:#E8E8E8;" id="price-celo-usd">--</span>
+                <span style="font-size:0.8rem;color:#777;">USD</span>
+              </div>
+              <div id="price-celo-computed" style="font-size:0.65rem;color:#888;margin-bottom:0.25rem;"></div>
+              <div id="price-celo-change" style="font-size:0.8rem;margin-bottom:0.75rem;"></div>
+              <div class="balance-row">
+                <span class="balance-label">CELO Price</span>
+                <span class="balance-value" id="price-celo-ref" style="font-size:0.85rem;">--</span>
+              </div>
+              <div class="balance-row">
+                <span class="balance-label">Native Price</span>
+                <span class="balance-value" id="price-celo-native" style="font-size:0.85rem;">--</span>
+              </div>
+              <div class="balance-row">
+                <span class="balance-label">Liquidity</span>
+                <span class="balance-value" id="price-celo-liq" style="font-size:0.85rem;">--</span>
+              </div>
+              <div class="balance-row">
+                <span class="balance-label">24h Volume</span>
+                <span class="balance-value" id="price-celo-vol" style="font-size:0.85rem;">--</span>
+              </div>
+              <div class="balance-row">
+                <span class="balance-label">DEX</span>
+                <span class="balance-value" id="price-celo-dex" style="font-size:0.85rem;">--</span>
+              </div>
+              <div id="price-celo-link" style="margin-top:0.5rem;"></div>
+            </div>
+          </div>
+          <div id="price-gap-banner" style="display:none;margin-top:1rem;padding:0.75rem 1rem;border:1px solid #333;background:#1a1a1a;text-align:center;font-size:0.85rem;"></div>
+        </div>
+      </section>
+
+      <section class="admin-section">
+        <h2 class="admin-section-title">SELFCLAW/CELO Pool (Uniswap)</h2>
+        <div id="pool-loading" style="text-align:center;padding:2rem;color:#555;"><span class="spinner"></span> Loading pool data...</div>
+        <div id="pool-content" style="display:none;">
+          <div class="wallet-overview">
+            <div class="wallet-panel">
+              <div class="wallet-panel-title">Pool State</div>
+              <div class="balance-row">
+                <span class="balance-label">Pool ID</span>
+                <span class="balance-value" id="pool-id" style="font-size:0.65rem;word-break:break-all;">--</span>
+              </div>
+              <div class="balance-row">
+                <span class="balance-label">Current Tick</span>
+                <span class="balance-value" id="pool-tick" style="font-size:0.85rem;">--</span>
+              </div>
+              <div class="balance-row">
+                <span class="balance-label">Active Liquidity</span>
+                <span class="balance-value" id="pool-liquidity" style="font-size:0.85rem;">--</span>
+              </div>
+              <div class="balance-row">
+                <span class="balance-label">LP Fee</span>
+                <span class="balance-value" id="pool-fee" style="font-size:0.85rem;">--</span>
+              </div>
+            </div>
+            <div class="wallet-panel">
+              <div class="wallet-panel-title">On-Chain Price</div>
+              <div class="balance-row">
+                <span class="balance-label">CELO per SELFCLAW</span>
+                <span class="balance-value" id="pool-price" style="font-size:1rem;">--</span>
+              </div>
+              <div class="balance-row">
+                <span class="balance-label">SELFCLAW per CELO</span>
+                <span class="balance-value" id="pool-inverse-price" style="font-size:1rem;">--</span>
+              </div>
+              <div class="balance-row">
+                <span class="balance-label">sqrtPriceX96</span>
+                <span class="balance-value" id="pool-sqrt" style="font-size:0.65rem;word-break:break-all;">--</span>
+              </div>
+              <div class="balance-row">
+                <span class="balance-label">Token0 (CELO)</span>
+                <span class="balance-value" id="pool-token0" style="font-size:0.6rem;word-break:break-all;">--</span>
+              </div>
+              <div class="balance-row">
+                <span class="balance-label">Token1 (SELFCLAW)</span>
+                <span class="balance-value" id="pool-token1" style="font-size:0.6rem;word-break:break-all;">--</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="admin-section">
+        <h2 class="admin-section-title">Wallet Overview</h2>
+        <div id="wallet-loading" style="text-align:center;padding:2rem;color:#555;"><span class="spinner"></span> Loading balances...</div>
+        <div id="wallet-content" class="wallet-overview" style="display:none;"></div>
+      </section>
+
+      <section class="admin-section">
+        <h2 class="admin-section-title">Bridge Status</h2>
+        <div id="bridge-loading" style="text-align:center;padding:2rem;color:#555;"><span class="spinner"></span> Loading bridge status...</div>
+        <div id="bridge-content" class="bridge-status-grid" style="display:none;"></div>
+      </section>
+
+      <section class="admin-section">
+        <h2 class="admin-section-title">Bridge Actions</h2>
+        <div class="actions-grid">
+
+          <div class="action-card">
+            <h4>Attest SELFCLAW</h4>
+            <p style="color:#777;font-size:0.7rem;margin-bottom:0.75rem;line-height:1.4;">One-time: registers SELFCLAW with Wormhole on Celo. After submitting, the system will automatically wait for guardian signatures and finalize on Celo.</p>
+            <button class="action-btn" id="btn-attest" onclick="doFullAttest(this)">Attest on Celo</button>
+            <div class="action-result" id="result-attest"></div>
+          </div>
+
+          <div class="action-card">
+            <h4>Complete Existing Attestation</h4>
+            <p style="color:#777;font-size:0.7rem;margin-bottom:0.75rem;line-height:1.4;">Have a pending attestation tx? Paste the Base tx hash here to fetch the VAA and finalize on Celo.</p>
+            <input type="text" class="input" id="attest-tx-hash" placeholder="0x... Base tx hash">
+            <button class="action-btn" id="btn-complete-attest" onclick="doCompleteAttestByTx(this)">Complete on Celo</button>
+            <div class="action-result" id="result-complete-attest"></div>
+          </div>
+
+          <div class="action-card">
+            <h4>Bridge SELFCLAW</h4>
+            <p style="color:#777;font-size:0.7rem;margin-bottom:0.75rem;line-height:1.4;">Fully automatic: locks SELFCLAW on Base, waits for guardian signatures, and completes transfer on Celo. No manual steps needed.</p>
+            <input type="text" class="input" id="bridge-selfclaw-amount" placeholder="Amount (e.g. 1000)">
+            <button class="action-btn" id="btn-bridge" onclick="doAutoBridge(this)">Bridge to Celo</button>
+            <div class="action-result" id="result-bridge"></div>
+            <div id="bridge-progress" style="display:none;margin-top:0.75rem;"></div>
+          </div>
+
+          <div class="action-card">
+            <h4>Track Existing Bridge</h4>
+            <p style="color:#777;font-size:0.7rem;margin-bottom:0.75rem;line-height:1.4;">Have a pending bridge tx from before? Paste the Base tx hash to track and claim it.</p>
+            <input type="text" class="input" id="track-bridge-tx" placeholder="0x... Base tx hash">
+            <button class="action-btn" onclick="doTrackBridge(this)">Track Bridge</button>
+            <div class="action-result" id="result-track-bridge"></div>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="admin-section">
+        <h2 class="admin-section-title">Pending Bridge Claims</h2>
+        <div id="pending-claims-loading" style="text-align:center;padding:1rem;color:#555;"><span class="spinner"></span> Checking for pending claims...</div>
+        <div id="pending-claims-content" style="display:none;"></div>
+        <div id="pending-claims-empty" style="display:none;text-align:center;padding:1.5rem;color:#777;font-size:0.8rem;">No pending bridge claims</div>
+      </section>
+
+      <section class="admin-section">
+        <h2 class="admin-section-title">Liquidity Pool Management</h2>
+        <div id="lp-loading" style="text-align:center;padding:1rem;color:#555;"><span class="spinner"></span> Loading SELFCLAW balance...</div>
+        <div id="lp-info" style="display:none;margin-bottom:1rem;">
+          <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;">
+            <div class="bridge-status-card" style="flex:1;min-width:200px;">
+              <div class="bridge-token-name">SELFCLAW on Celo</div>
+              <div style="font-size:1.2rem;color:#4AFF6B;font-weight:bold;" id="lp-selfclaw-balance">—</div>
+              <div style="font-size:0.65rem;color:#777;margin-top:0.25rem;">Available for sponsorship</div>
+            </div>
+          </div>
+        </div>
+        <div class="actions-grid">
+
+          <div class="action-card">
+            <h4>Collect LP Fees</h4>
+            <p style="color:#777;font-size:0.7rem;margin-bottom:0.75rem;line-height:1.4;">Collect trading fees from your LP position. Enter the NFT position token ID.</p>
+            <input type="text" class="input" id="lp-position-id" placeholder="Position Token ID">
+            <button class="action-btn" onclick="doCollectFees(this)">Collect Fees</button>
+            <div class="action-result" id="result-collect-fees"></div>
+          </div>
+
+          <div class="action-card">
+            <h4>Swap CELO to SELFCLAW</h4>
+            <p style="color:#777;font-size:0.7rem;margin-bottom:0.75rem;line-height:1.4;">Swap collected CELO fees into SELFCLAW for treasury.</p>
+            <input type="text" class="input" id="swap-celo-amount" placeholder="CELO amount (e.g. 10)">
+            <button class="action-btn" onclick="doSwapCeloToSelfclaw(this)">Swap to SELFCLAW</button>
+            <div class="action-result" id="result-swap"></div>
+          </div>
+
+          <div class="action-card">
+            <h4>Check Position</h4>
+            <p style="color:#777;font-size:0.7rem;margin-bottom:0.75rem;line-height:1.4;">View position details and uncollected fees.</p>
+            <input type="text" class="input" id="check-position-id" placeholder="Position Token ID">
+            <button class="action-btn" onclick="doCheckPosition(this)">Check Position</button>
+            <div class="action-result" id="result-check-position"></div>
+          </div>
+
+          <div class="action-card">
+            <h4>Create Pool</h4>
+            <p style="color:#777;font-size:0.7rem;margin-bottom:0.75rem;line-height:1.4;">Create a new Uniswap pool with liquidity. Used for AgentToken/SELFCLAW pairs.</p>
+            <input type="text" class="input" id="pool-token-a" placeholder="Token A address">
+            <input type="text" class="input" id="pool-token-b" placeholder="Token B address" value="0xCD88f99Adf75A9110c0bcd22695A32A20eC54ECb" style="margin-top:0.4rem;">
+            <input type="text" class="input" id="pool-amount-a" placeholder="Amount A" style="margin-top:0.4rem;">
+            <input type="text" class="input" id="pool-amount-b" placeholder="Amount B (SELFCLAW)" style="margin-top:0.4rem;">
+            <select class="input" id="pool-fee-tier" style="margin-top:0.4rem;">
+              <option value="10000">1% fee tier</option>
+              <option value="3000">0.3% fee tier</option>
+              <option value="500">0.05% fee tier</option>
+            </select>
+            <button class="action-btn" onclick="doCreatePool(this)" style="margin-top:0.5rem;">Create Pool + Add Liquidity</button>
+            <div class="action-result" id="result-create-pool"></div>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="admin-section">
+        <h2 class="admin-section-title">Activity Log</h2>
+        <div class="activity-log" id="activity-log">
+          <div class="log-empty"><span class="spinner"></span> Loading...</div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script>
+
+    function getToken() {
+      return sessionStorage.getItem('selfclaw_admin_token');
+    }
+
+    function authHeaders() {
+      return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() };
+    }
+
+    function showDashboard() {
+      document.getElementById('login-view').style.display = 'none';
+      document.getElementById('dashboard-view').style.display = 'block';
+      refreshAll();
+    }
+
+    function handleAuthError(r) {
+      if (r.status === 401) {
+        doLogout();
+        var errEl = document.getElementById('login-error');
+        errEl.textContent = 'Session expired, please log in again';
+        errEl.style.display = 'block';
+        return true;
+      }
+      return false;
+    }
+
+    function doLogin() {
+      var pw = document.getElementById('login-password').value.trim();
+      if (!pw) return;
+      var errEl = document.getElementById('login-error');
+      errEl.style.display = 'none';
+      fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pw })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.success && data.token) {
+          sessionStorage.setItem('selfclaw_admin_token', data.token);
+          showDashboard();
+        } else {
+          errEl.textContent = data.error || 'Invalid password';
+          errEl.style.display = 'block';
+        }
+      })
+      .catch(function(e) {
+        errEl.textContent = 'Connection error';
+        errEl.style.display = 'block';
+      });
+    }
+
+    function doLogout() {
+      sessionStorage.removeItem('selfclaw_admin_token');
+      document.getElementById('dashboard-view').style.display = 'none';
+      document.getElementById('login-view').style.display = 'flex';
+      document.getElementById('login-password').value = '';
+    }
+
+    function refreshAll() {
+      loadStats();
+      loadTokenPrices();
+      loadPoolInfo();
+      loadWalletBalances();
+      loadBridgeStatus();
+      loadPendingClaims();
+      loadSelfclawBalance();
+      loadActivityLog();
+      document.getElementById('last-refresh').textContent = 'Last refresh: ' + new Date().toLocaleTimeString();
+    }
+
+    function copyToClipboard(text, btn) {
+      navigator.clipboard.writeText(text).then(function() {
+        var orig = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(function() { btn.textContent = orig; }, 1500);
+      });
+    }
+
+    function truncateAddr(addr) {
+      if (!addr) return '';
+      return addr.slice(0, 6) + '...' + addr.slice(-4);
+    }
+
+    function timeAgo(dateStr) {
+      if (!dateStr) return '';
+      var now = new Date();
+      var then = new Date(dateStr);
+      var diff = Math.floor((now - then) / 1000);
+      if (diff < 60) return diff + 's ago';
+      diff = Math.floor(diff / 60);
+      if (diff < 60) return diff + 'min ago';
+      diff = Math.floor(diff / 60);
+      if (diff < 24) return diff + 'h ago';
+      diff = Math.floor(diff / 24);
+      return diff + 'd ago';
+    }
+
+    function loadStats() {
+      fetch('/api/admin/registry-stats', { headers: authHeaders() })
+        .then(function(r) {
+          if (handleAuthError(r)) throw new Error('auth');
+          if (!r.ok) throw new Error('Server error (' + r.status + ')');
+          return r.json();
+        })
+        .then(function(data) {
+          document.getElementById('stat-verified').textContent = data.verifiedAgents != null ? data.verifiedAgents : 0;
+          document.getElementById('stat-wallets').textContent = data.walletsCreated != null ? data.walletsCreated : 0;
+          document.getElementById('stat-gas').textContent = data.gasSent != null ? data.gasSent : 0;
+          document.getElementById('stat-tokens').textContent = data.tokensDeployed != null ? data.tokensDeployed : 0;
+        })
+        .catch(function(e) {
+          if (e.message === 'auth') return;
+        });
+    }
+
+    function loadWalletBalances() {
+      var loading = document.getElementById('wallet-loading');
+      var content = document.getElementById('wallet-content');
+      loading.style.display = 'block';
+      content.style.display = 'none';
+
+      fetch('/api/admin/wallet-balances', { headers: authHeaders() })
+        .then(function(r) {
+          if (handleAuthError(r)) throw new Error('auth');
+          if (!r.ok) throw new Error('Server error (' + r.status + ')');
+          return r.json();
+        })
+        .then(function(data) {
+          loading.style.display = 'none';
+          content.style.display = 'grid';
+
+          if (data.error && !data.base) {
+            content.innerHTML = '<div class="wallet-panel" style="grid-column:1/-1;text-align:center;color:#ef4444;">' + data.error + '</div>';
+            return;
+          }
+
+          var walletAddr = data.sponsorAddress || data.walletAddress || data.address || '';
+          var base = data.base || {};
+          var celo = data.celo || {};
+
+          function fmtBal(val) {
+            if (val == null) return '\u2014';
+            var n = parseFloat(val);
+            if (isNaN(n)) return val;
+            if (n === 0) return '0';
+            if (n < 0.0001) return '< 0.0001';
+            return n.toFixed(4);
+          }
+
+          content.innerHTML =
+            '<div class="wallet-panel">' +
+              '<div class="wallet-panel-title">Base</div>' +
+              '<div class="wallet-addr">' +
+                '<a href="https://basescan.org/address/' + walletAddr + '" target="_blank" rel="noopener">' + truncateAddr(walletAddr) + '</a>' +
+                '<button class="copy-btn" onclick="copyToClipboard(\'' + walletAddr + '\', this)">Copy</button>' +
+              '</div>' +
+              '<div class="balance-row"><span class="balance-label">ETH</span><span class="balance-value">' + fmtBal(base.native) + '</span></div>' +
+              '<div class="balance-row"><span class="balance-label">SELFCLAW</span><span class="balance-value">' + fmtBal(base.selfclaw) + '</span></div>' +
+            '</div>' +
+            '<div class="wallet-panel">' +
+              '<div class="wallet-panel-title">Celo</div>' +
+              '<div class="wallet-addr">' +
+                '<a href="https://celoscan.io/address/' + walletAddr + '" target="_blank" rel="noopener">' + truncateAddr(walletAddr) + '</a>' +
+                '<button class="copy-btn" onclick="copyToClipboard(\'' + walletAddr + '\', this)">Copy</button>' +
+              '</div>' +
+              '<div class="balance-row"><span class="balance-label">CELO</span><span class="balance-value">' + fmtBal(celo.native) + '</span></div>' +
+              '<div class="balance-row"><span class="balance-label">Wrapped SELFCLAW</span><span class="balance-value">' + fmtBal(celo.wrappedSelfclaw) + '</span></div>' +
+            '</div>';
+        })
+        .catch(function(e) {
+          if (e.message === 'auth') return;
+          loading.style.display = 'none';
+          content.style.display = 'grid';
+          content.innerHTML = '<div class="wallet-panel" style="grid-column:1/-1;text-align:center;color:#ef4444;">Failed to load wallet balances</div>';
+        });
+    }
+
+    function loadBridgeStatus() {
+      var loading = document.getElementById('bridge-loading');
+      var content = document.getElementById('bridge-content');
+      loading.style.display = 'block';
+      content.style.display = 'none';
+
+      fetch('/api/admin/bridge-status', { headers: authHeaders() })
+        .then(function(r) {
+          if (handleAuthError(r)) throw new Error('auth');
+          if (!r.ok) throw new Error('Server error (' + r.status + ')');
+          return r.json();
+        })
+        .then(function(data) {
+          loading.style.display = 'none';
+          content.style.display = 'grid';
+
+          if (data.error && data.selfclawAttested == null) {
+            content.innerHTML = '<div class="bridge-status-card" style="grid-column:1/-1;text-align:center;color:#ef4444;">' + data.error + '</div>';
+            return;
+          }
+
+          var selfclaw = {
+            attested: data.selfclawAttested || false,
+            wrappedAddress: data.selfclawWrappedAddress || ''
+          };
+
+          content.innerHTML =
+            renderBridgeCard('SELFCLAW', selfclaw);
+        })
+        .catch(function(e) {
+          if (e.message === 'auth') return;
+          loading.style.display = 'none';
+          content.style.display = 'grid';
+          content.innerHTML = '<div class="bridge-status-card" style="grid-column:1/-1;text-align:center;color:#ef4444;">Failed to load bridge status</div>';
+        });
+    }
+
+    function renderBridgeCard(name, info) {
+      var attested = info.attested || info.isAttested || false;
+      var wrappedAddr = info.wrappedAddress || info.wrapped_address || '';
+      var html = '<div class="bridge-status-card">' +
+        '<div class="bridge-token-name">' + name + '</div>' +
+        '<div class="bridge-attested">' +
+          '<span class="status-dot ' + (attested ? 'green' : 'red') + '"></span>' +
+          '<span style="color:' + (attested ? '#4AFF6B' : '#ef4444') + '">' + (attested ? 'Attested on Celo' : 'Not attested') + '</span>' +
+        '</div>';
+      if (wrappedAddr) {
+        html += '<div class="wrapped-addr">' +
+          '<a href="https://celoscan.io/address/' + wrappedAddr + '" target="_blank" rel="noopener" style="color:#777;text-decoration:none;">' + truncateAddr(wrappedAddr) + '</a>' +
+          '<button class="copy-btn" onclick="copyToClipboard(\'' + wrappedAddr + '\', this)">Copy</button>' +
+        '</div>';
+      }
+      html += '</div>';
+      return html;
+    }
+
+    function setActionResult(id, msg, type) {
+      var el = document.getElementById(id);
+      el.className = 'action-result ' + type;
+      el.textContent = msg;
+    }
+
+    function doCompleteAttestByTx(btn) {
+      var txHash = document.getElementById('attest-tx-hash').value.trim();
+      if (!txHash) return;
+      btn.disabled = true;
+      setActionResult('result-complete-attest', 'Fetching VAA and completing attestation on Celo...', 'loading');
+
+      fetch('/api/admin/bridge/complete-attestation-by-tx', {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({ txHash: txHash })
+      })
+      .then(function(r) {
+        if (handleAuthError(r)) throw new Error('auth');
+        return r.json();
+      })
+      .then(function(data) {
+        btn.disabled = false;
+        if (data.error) {
+          setActionResult('result-complete-attest', data.error, 'error');
+          return;
+        }
+        var msg = 'Attestation complete on Celo!';
+        if (data.txHash) msg += '\nTx: ' + data.txHash;
+        if (data.wrappedAddress) msg += '\nWrapped SELFCLAW: ' + data.wrappedAddress;
+        setActionResult('result-complete-attest', msg, 'success');
+        loadBridgeStatus();
+        loadWalletBalances();
+      })
+      .catch(function(e) {
+        btn.disabled = false;
+        if (e.message === 'auth') return;
+        setActionResult('result-complete-attest', 'Request failed: ' + e.message, 'error');
+      });
+    }
+
+    function doFullAttest(btn) {
+      btn.disabled = true;
+      setActionResult('result-attest', 'Step 1/3: Submitting attestation on Base...', 'loading');
+
+      fetch('/api/admin/bridge/attest', {
+        method: 'POST',
+        headers: authHeaders()
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.error) {
+          btn.disabled = false;
+          setActionResult('result-attest', data.error, 'error');
+          return;
+        }
+        var txHash = data.txHash;
+        setActionResult('result-attest', 'Step 2/3: Waiting for Wormhole guardians (~15 min)...\nTx: ' + txHash, 'loading');
+        pollVaaAndComplete(txHash, 'attestation', btn);
+      })
+      .catch(function(e) {
+        btn.disabled = false;
+        setActionResult('result-attest', 'Request failed: ' + e.message, 'error');
+      });
+    }
+
+    function doAutoBridge(btn) {
+      var amount = document.getElementById('bridge-selfclaw-amount').value.trim();
+      if (!amount) return;
+      btn.disabled = true;
+      var progressDiv = document.getElementById('bridge-progress');
+      progressDiv.style.display = 'block';
+      setActionResult('result-bridge', 'Locking SELFCLAW on Base...', 'loading');
+      updateBridgeProgress('transfer', 'Submitting transfer on Base...');
+
+      fetch('/api/admin/bridge/auto-bridge', {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({ amount: amount })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.error) {
+          btn.disabled = false;
+          progressDiv.style.display = 'none';
+          setActionResult('result-bridge', data.error, 'error');
+          return;
+        }
+        setActionResult('result-bridge', 'Transfer confirmed on Base! Tx: ' + data.sourceTxHash, 'success');
+        updateBridgeProgress('polling', 'Waiting for Wormhole guardians to sign (~5-15 min)...');
+        pollBridgeStatus(data.bridgeId, btn, progressDiv);
+      })
+      .catch(function(e) {
+        btn.disabled = false;
+        progressDiv.style.display = 'none';
+        setActionResult('result-bridge', 'Request failed: ' + e.message, 'error');
+      });
+    }
+
+    function updateBridgeProgress(phase, message) {
+      var progressDiv = document.getElementById('bridge-progress');
+      var phases = [
+        { id: 'transfer', label: 'Lock on Base' },
+        { id: 'polling', label: 'Guardian Signatures' },
+        { id: 'completing', label: 'Complete on Celo' },
+        { id: 'done', label: 'Done' }
+      ];
+      var phaseOrder = { transfer: 0, polling: 1, completing: 2, done: 3 };
+      var currentIdx = phaseOrder[phase] || 0;
+
+      var html = '<div style="background:#111;border:1px solid #333;border-radius:6px;padding:0.75rem;">';
+      html += '<div style="display:flex;gap:0.5rem;margin-bottom:0.5rem;">';
+      phases.forEach(function(p, i) {
+        var color = i < currentIdx ? '#4AFF6B' : (i === currentIdx ? '#f59e0b' : '#555');
+        var icon = i < currentIdx ? '\u2713' : (i === currentIdx ? '\u25CF' : '\u25CB');
+        html += '<span style="font-size:0.65rem;color:' + color + ';">' + icon + ' ' + p.label + '</span>';
+        if (i < phases.length - 1) html += '<span style="color:#333;font-size:0.65rem;">\u2192</span>';
+      });
+      html += '</div>';
+      html += '<div style="font-size:0.7rem;color:#ccc;">' + message + '</div>';
+      if (phase === 'polling') {
+        html += '<div style="margin-top:0.4rem;height:3px;background:#333;border-radius:2px;overflow:hidden;">';
+        html += '<div style="height:100%;background:#f59e0b;width:0%;animation:bridgePulse 2s ease-in-out infinite;"></div>';
+        html += '</div>';
+      }
+      html += '</div>';
+      progressDiv.innerHTML = html;
+    }
+
+    var bridgePollTimer = null;
+    function pollBridgeStatus(bridgeId, btn, progressDiv) {
+      if (bridgePollTimer) clearInterval(bridgePollTimer);
+      var pollCount = 0;
+      bridgePollTimer = setInterval(function() {
+        pollCount++;
+        fetch('/api/admin/bridge/status/' + bridgeId, { headers: authHeaders() })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.status === 'claimed') {
+            clearInterval(bridgePollTimer);
+            bridgePollTimer = null;
+            btn.disabled = false;
+            updateBridgeProgress('done', 'Bridge complete! Tokens received on Celo. Tx: ' + (data.destTxHash || ''));
+            setActionResult('result-bridge', 'Bridge complete! SELFCLAW tokens are now on Celo.\nCelo Tx: ' + (data.destTxHash || ''), 'success');
+            loadPendingClaims();
+            loadBridgeStatus();
+            return;
+          }
+          if (data.status === 'vaa_ready') {
+            updateBridgeProgress('completing', 'VAA received! Completing transfer on Celo...');
+          } else if (data.status === 'polling' || data.status === 'submitted') {
+            var elapsed = Math.floor(pollCount * 10 / 60);
+            updateBridgeProgress('polling', 'Waiting for guardians... (~' + elapsed + ' min elapsed)');
+          }
+          if (data.error && data.status !== 'polling' && data.status !== 'submitted') {
+            clearInterval(bridgePollTimer);
+            bridgePollTimer = null;
+            btn.disabled = false;
+            setActionResult('result-bridge', 'Error: ' + data.error, 'error');
+            progressDiv.style.display = 'none';
+          }
+        })
+        .catch(function() {});
+      }, 10000);
+    }
+
+    function doTrackBridge(btn) {
+      var txHash = document.getElementById('track-bridge-tx').value.trim();
+      if (!txHash) return;
+      btn.disabled = true;
+      setActionResult('result-track-bridge', 'Adding to tracking...', 'loading');
+
+      fetch('/api/admin/bridge/add-pending', {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({ sourceTxHash: txHash })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        btn.disabled = false;
+        if (data.error) {
+          setActionResult('result-track-bridge', data.error, 'error');
+          return;
+        }
+        if (data.existing) {
+          setActionResult('result-track-bridge', 'Already tracked. Check "Pending Bridge Claims" below.', 'success');
+        } else {
+          setActionResult('result-track-bridge', 'Added to tracking. Check "Pending Bridge Claims" below.', 'success');
+        }
+        document.getElementById('track-bridge-tx').value = '';
+        loadPendingClaims();
+      })
+      .catch(function(e) {
+        btn.disabled = false;
+        setActionResult('result-track-bridge', 'Request failed: ' + e.message, 'error');
+      });
+    }
+
+    var pendingClaimsTimer = null;
+    function loadPendingClaims() {
+      var loading = document.getElementById('pending-claims-loading');
+      var content = document.getElementById('pending-claims-content');
+      var empty = document.getElementById('pending-claims-empty');
+      loading.style.display = 'block';
+      content.style.display = 'none';
+      empty.style.display = 'none';
+
+      fetch('/api/admin/bridge/pending', { headers: authHeaders() })
+      .then(function(r) {
+        if (handleAuthError(r)) throw new Error('auth');
+        return r.json();
+      })
+      .then(function(data) {
+        loading.style.display = 'none';
+        if (!data.pending || data.pending.length === 0) {
+          empty.style.display = 'block';
+          if (pendingClaimsTimer) { clearInterval(pendingClaimsTimer); pendingClaimsTimer = null; }
+          return;
+        }
+        content.style.display = 'block';
+        var hasPending = false;
+        var html = '<div style="display:flex;flex-direction:column;gap:0.75rem;">';
+        data.pending.forEach(function(tx) {
+          var statusColor, statusLabel;
+          if (tx.status === 'vaa_ready') {
+            statusColor = '#4AFF6B'; statusLabel = 'READY TO CLAIM';
+          } else if (tx.status === 'polling') {
+            statusColor = '#f59e0b'; statusLabel = 'AUTO-COMPLETING...';
+            hasPending = true;
+          } else {
+            statusColor = '#f59e0b'; statusLabel = 'WAITING FOR GUARDIANS';
+            hasPending = true;
+          }
+          var age = tx.createdAt ? getTimeAgo(new Date(tx.createdAt)) : '';
+          html += '<div style="background:#1a1a1a;border:1px solid #333;border-radius:6px;padding:1rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;">';
+          html += '<div style="flex:1;min-width:200px;">';
+          html += '<div style="font-size:0.85rem;color:#fff;margin-bottom:0.3rem;">' + (tx.type === 'transfer' ? 'Bridge Transfer' : tx.type) + ' — ' + tx.amount + ' SELFCLAW</div>';
+          html += '<div style="font-size:0.65rem;color:#777;word-break:break-all;">Tx: ' + tx.sourceTxHash + '</div>';
+          if (tx.error) html += '<div style="font-size:0.6rem;color:#ef4444;margin-top:0.2rem;">' + tx.error + '</div>';
+          if (age) html += '<div style="font-size:0.6rem;color:#555;margin-top:0.2rem;">' + age + '</div>';
+          html += '</div>';
+          html += '<div style="display:flex;align-items:center;gap:0.75rem;">';
+          html += '<span style="font-size:0.7rem;color:' + statusColor + ';font-weight:bold;">' + statusLabel + '</span>';
+          if (tx.status === 'vaa_ready') {
+            html += '<button class="action-btn" style="padding:0.4rem 1rem;font-size:0.75rem;" onclick="claimBridge(\'' + tx.id + '\', this)">Claim Tokens</button>';
+          } else if (tx.status === 'polling') {
+            html += '<span class="spinner" style="width:14px;height:14px;border-width:2px;"></span>';
+          }
+          html += '</div>';
+          html += '</div>';
+        });
+        html += '</div>';
+        content.innerHTML = html;
+
+        if (hasPending && !pendingClaimsTimer) {
+          pendingClaimsTimer = setInterval(loadPendingClaims, 10000);
+        } else if (!hasPending && pendingClaimsTimer) {
+          clearInterval(pendingClaimsTimer);
+          pendingClaimsTimer = null;
+        }
+      })
+      .catch(function(e) {
+        loading.style.display = 'none';
+        if (e.message === 'auth') return;
+        content.style.display = 'block';
+        content.innerHTML = '<div style="text-align:center;color:#ef4444;padding:1rem;">Failed to load pending claims</div>';
+      });
+    }
+
+    function getTimeAgo(date) {
+      var seconds = Math.floor((new Date() - date) / 1000);
+      if (seconds < 60) return seconds + 's ago';
+      var minutes = Math.floor(seconds / 60);
+      if (minutes < 60) return minutes + 'm ago';
+      var hours = Math.floor(minutes / 60);
+      if (hours < 24) return hours + 'h ago';
+      var days = Math.floor(hours / 24);
+      return days + 'd ago';
+    }
+
+    function claimBridge(bridgeId, btn) {
+      btn.disabled = true;
+      btn.textContent = 'Claiming...';
+
+      fetch('/api/admin/bridge/claim', {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({ bridgeId: bridgeId })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        btn.disabled = false;
+        if (data.error) {
+          btn.textContent = 'Failed';
+          btn.style.background = '#ef4444';
+          setTimeout(function() {
+            btn.textContent = 'Claim Tokens';
+            btn.style.background = '';
+          }, 3000);
+          alert('Claim failed: ' + data.error);
+          return;
+        }
+        btn.textContent = 'Claimed!';
+        btn.style.background = '#4AFF6B';
+        btn.style.color = '#000';
+        loadPendingClaims();
+        loadWalletBalances();
+        loadBridgeStatus();
+      })
+      .catch(function(e) {
+        btn.disabled = false;
+        btn.textContent = 'Claim Tokens';
+        alert('Claim request failed: ' + e.message);
+      });
+    }
+
+    function pollVaaAndComplete(txHash, type, btn) {
+      var resultId = type === 'attestation' ? 'result-attest' : 'result-bridge';
+      var attempt = 0;
+      var maxAttempts = 60;
+      var interval = 15000;
+
+      function poll() {
+        attempt++;
+        fetch('/api/admin/bridge/fetch-vaa?txHash=' + encodeURIComponent(txHash), {
+          headers: authHeaders()
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.vaaBytes) {
+            setActionResult(resultId, 'Step 3/3: Finalizing on Celo...', 'loading');
+            var completeUrl = type === 'attestation'
+              ? '/api/admin/bridge/complete-attestation'
+              : '/api/admin/bridge/complete-transfer';
+
+            fetch(completeUrl, {
+              method: 'POST',
+              headers: authHeaders(),
+              body: JSON.stringify({ vaaBytes: data.vaaBytes })
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(result) {
+              btn.disabled = false;
+              if (result.error) {
+                setActionResult(resultId, 'Finalization failed: ' + result.error, 'error');
+              } else {
+                setActionResult(resultId, 'Complete! Tx: ' + (result.txHash || result.destTxHash || 'confirmed'), 'success');
+                loadBridgeStatus();
+                loadWalletBalances();
+              }
+            })
+            .catch(function(e) {
+              btn.disabled = false;
+              setActionResult(resultId, 'Finalization request failed: ' + e.message, 'error');
+            });
+          } else if (attempt >= maxAttempts) {
+            btn.disabled = false;
+            setActionResult(resultId, 'Timed out waiting for VAA. The transaction was submitted (tx: ' + txHash + ') but guardians have not signed yet. Try again later or check wormholescan.io.', 'error');
+          } else {
+            setActionResult(resultId, 'Step 2/3: Waiting for guardians... (' + attempt + '/' + maxAttempts + ')\nTx: ' + txHash, 'loading');
+            setTimeout(poll, interval);
+          }
+        })
+        .catch(function(e) {
+          if (attempt >= maxAttempts) {
+            btn.disabled = false;
+            setActionResult(resultId, 'Error polling VAA: ' + e.message, 'error');
+          } else {
+            setTimeout(poll, interval);
+          }
+        });
+      }
+
+      setTimeout(poll, interval);
+    }
+
+    function formatUsd(val) {
+      if (!val) return '--';
+      var n = parseFloat(val);
+      if (isNaN(n)) return val;
+      if (n < 0.0001) return '$' + n.toExponential(4);
+      if (n < 1) return '$' + n.toFixed(6);
+      return '$' + n.toLocaleString(undefined, {maximumFractionDigits: 4});
+    }
+
+    function formatVolume(val) {
+      if (!val) return '--';
+      var n = parseFloat(val);
+      if (isNaN(n)) return val;
+      if (n >= 1e6) return '$' + (n / 1e6).toFixed(2) + 'M';
+      if (n >= 1e3) return '$' + (n / 1e3).toFixed(2) + 'K';
+      return '$' + n.toFixed(2);
+    }
+
+    function loadTokenPrices() {
+      var loading = document.getElementById('prices-loading');
+      var content = document.getElementById('prices-content');
+      loading.style.display = 'block';
+      content.style.display = 'none';
+
+      fetch('/api/admin/token-prices', { headers: authHeaders() })
+        .then(function(r) {
+          if (handleAuthError(r)) throw new Error('auth');
+          return r.json();
+        })
+        .then(function(data) {
+          loading.style.display = 'none';
+          content.style.display = 'block';
+
+          var b = data.base || {};
+          document.getElementById('price-base-usd').textContent = formatUsd(b.priceUsd);
+          document.getElementById('price-base-native').textContent = b.priceNative ? b.priceNative + ' ETH' : '--';
+          document.getElementById('price-base-liq').textContent = formatVolume(b.liquidity);
+          document.getElementById('price-base-vol').textContent = formatVolume(b.volume24h);
+          document.getElementById('price-base-dex').textContent = b.dex || '--';
+
+          var changeEl = document.getElementById('price-base-change');
+          if (b.priceChange24h != null) {
+            var ch = parseFloat(b.priceChange24h);
+            changeEl.textContent = (ch >= 0 ? '+' : '') + ch.toFixed(2) + '% (24h)';
+            changeEl.style.color = ch >= 0 ? '#4AFF6B' : '#ef4444';
+          } else {
+            changeEl.textContent = '';
+          }
+
+          var baseLinkEl = document.getElementById('price-base-link');
+          if (b.pairUrl) {
+            baseLinkEl.innerHTML = '<a href="' + b.pairUrl + '" target="_blank" style="color:#FF6B4A;font-size:0.7rem;text-decoration:none;">View on DexScreener</a>';
+          } else {
+            baseLinkEl.innerHTML = '';
+          }
+
+          var c = data.celo || {};
+          document.getElementById('price-celo-usd').textContent = formatUsd(c.priceUsd);
+          var computedEl = document.getElementById('price-celo-computed');
+          if (c.computedFromCelo) {
+            computedEl.textContent = '(computed from CELO × on-chain ratio)';
+          } else {
+            computedEl.textContent = '';
+          }
+          document.getElementById('price-celo-ref').textContent = data.celoUsdPrice ? '$' + data.celoUsdPrice.toFixed(4) : '--';
+          document.getElementById('price-celo-native').textContent = c.priceNative ? c.priceNative + ' CELO' : (c.onChainPrice ? parseFloat(c.onChainPrice).toFixed(8) + ' CELO (on-chain)' : '--');
+          document.getElementById('price-celo-liq').textContent = formatVolume(c.liquidity);
+          document.getElementById('price-celo-vol').textContent = formatVolume(c.volume24h);
+          document.getElementById('price-celo-dex').textContent = c.dex || (c.computedFromCelo ? 'Uniswap (on-chain)' : '--');
+
+          var celoChangeEl = document.getElementById('price-celo-change');
+          if (c.priceChange24h != null) {
+            var cch = parseFloat(c.priceChange24h);
+            celoChangeEl.textContent = (cch >= 0 ? '+' : '') + cch.toFixed(2) + '% (24h)';
+            celoChangeEl.style.color = cch >= 0 ? '#4AFF6B' : '#ef4444';
+          } else {
+            celoChangeEl.textContent = '';
+          }
+
+          var celoLinkEl = document.getElementById('price-celo-link');
+          if (c.pairUrl) {
+            celoLinkEl.innerHTML = '<a href="' + c.pairUrl + '" target="_blank" style="color:#4AFF6B;font-size:0.7rem;text-decoration:none;">View on DexScreener</a>';
+          } else {
+            celoLinkEl.innerHTML = '';
+          }
+
+          var gapBanner = document.getElementById('price-gap-banner');
+          if (data.priceGapPercent != null) {
+            var gap = parseFloat(data.priceGapPercent);
+            var gapColor = Math.abs(gap) > 10 ? '#ef4444' : (Math.abs(gap) > 5 ? '#f59e0b' : '#4AFF6B');
+            var arrow = gap > 0 ? 'Celo premium' : 'Celo discount';
+            gapBanner.style.display = 'block';
+            gapBanner.innerHTML = '<span style="color:' + gapColor + ';font-weight:700;">' + (gap >= 0 ? '+' : '') + gap + '%</span> <span style="color:#888;">cross-chain price gap (' + arrow + ' vs Base)</span>';
+          } else {
+            gapBanner.style.display = 'none';
+          }
+        })
+        .catch(function(e) {
+          if (e.message === 'auth') return;
+          loading.style.display = 'none';
+          content.style.display = 'block';
+          document.getElementById('price-base-usd').textContent = 'Error';
+          document.getElementById('price-celo-usd').textContent = 'Error';
+        });
+    }
+
+    function loadPoolInfo() {
+      var loading = document.getElementById('pool-loading');
+      var content = document.getElementById('pool-content');
+      loading.style.display = 'block';
+      content.style.display = 'none';
+
+      fetch('/api/admin/pool-info', { headers: authHeaders() })
+        .then(function(r) {
+          if (handleAuthError(r)) throw new Error('auth');
+          return r.json();
+        })
+        .then(function(data) {
+          loading.style.display = 'none';
+          content.style.display = 'block';
+
+          document.getElementById('pool-id').textContent = data.poolId || '--';
+          document.getElementById('pool-tick').textContent = data.tick != null ? data.tick.toLocaleString() : '--';
+
+          var liq = data.liquidity;
+          if (liq && liq !== '0') {
+            var liqNum = BigInt(liq);
+            var liqFormatted = (Number(liqNum) / 1e18).toFixed(4);
+            document.getElementById('pool-liquidity').textContent = liqNum > 1000000000000000000n ? liqFormatted : liq;
+          } else {
+            document.getElementById('pool-liquidity').textContent = liq || '--';
+          }
+
+          if (data.lpFee != null) {
+            var feePercent = (data.lpFee / 10000).toFixed(2);
+            document.getElementById('pool-fee').textContent = feePercent + '% (' + data.lpFee + ')';
+          } else {
+            document.getElementById('pool-fee').textContent = '--';
+          }
+
+          var price = parseFloat(data.price || '0');
+          var invPrice = parseFloat(data.inversePrice || '0');
+          document.getElementById('pool-price').textContent = price > 0 ? price.toFixed(8) : '--';
+          document.getElementById('pool-inverse-price').textContent = invPrice > 0 ? invPrice.toFixed(4) : '--';
+          document.getElementById('pool-sqrt').textContent = data.sqrtPriceX96 || '--';
+          document.getElementById('pool-token0').textContent = data.token0 || '--';
+          document.getElementById('pool-token1').textContent = data.token1 || '--';
+        })
+        .catch(function(e) {
+          if (e.message === 'auth') return;
+          loading.style.display = 'none';
+          content.style.display = 'block';
+          document.getElementById('pool-tick').textContent = 'Error';
+        });
+    }
+
+    function loadSelfclawBalance() {
+      var loading = document.getElementById('lp-loading');
+      var info = document.getElementById('lp-info');
+      fetch('/api/admin/uniswap/selfclaw-balance', { headers: authHeaders() })
+        .then(function(r) {
+          if (handleAuthError(r)) throw new Error('auth');
+          if (!r.ok) throw new Error('Server error');
+          return r.json();
+        })
+        .then(function(data) {
+          loading.style.display = 'none';
+          info.style.display = 'block';
+          var bal = parseFloat(data.balance || '0');
+          document.getElementById('lp-selfclaw-balance').textContent = bal.toLocaleString(undefined, {maximumFractionDigits: 2}) + ' SELFCLAW';
+        })
+        .catch(function(e) {
+          if (e.message === 'auth') return;
+          loading.style.display = 'none';
+          info.style.display = 'block';
+          document.getElementById('lp-selfclaw-balance').textContent = 'Error loading';
+        });
+    }
+
+    function doCollectFees(btn) {
+      var posId = document.getElementById('lp-position-id').value.trim();
+      if (!posId) return;
+      btn.disabled = true;
+      setActionResult('result-collect-fees', 'Collecting fees...', 'loading');
+      fetch('/api/admin/uniswap/collect-fees', {
+        method: 'POST', headers: authHeaders(),
+        body: JSON.stringify({ positionTokenId: posId })
+      })
+      .then(function(r) {
+        if (handleAuthError(r)) throw new Error('auth');
+        return r.json();
+      })
+      .then(function(data) {
+        btn.disabled = false;
+        if (data.error) { setActionResult('result-collect-fees', data.error, 'error'); return; }
+        var msg = 'Fees collected!';
+        if (data.amount0) msg += '\nToken0: ' + data.amount0;
+        if (data.amount1) msg += '\nToken1: ' + data.amount1;
+        if (data.txHash) msg += '\nTx: ' + data.txHash;
+        setActionResult('result-collect-fees', msg, 'success');
+        loadSelfclawBalance();
+        loadWalletBalances();
+      })
+      .catch(function(e) {
+        btn.disabled = false;
+        if (e.message === 'auth') return;
+        setActionResult('result-collect-fees', 'Failed: ' + e.message, 'error');
+      });
+    }
+
+    function doSwapCeloToSelfclaw(btn) {
+      var amount = document.getElementById('swap-celo-amount').value.trim();
+      if (!amount) return;
+      btn.disabled = true;
+      setActionResult('result-swap', 'Swapping ' + amount + ' CELO to SELFCLAW...', 'loading');
+      fetch('/api/admin/uniswap/swap-celo-to-selfclaw', {
+        method: 'POST', headers: authHeaders(),
+        body: JSON.stringify({ amount: amount })
+      })
+      .then(function(r) {
+        if (handleAuthError(r)) throw new Error('auth');
+        return r.json();
+      })
+      .then(function(data) {
+        btn.disabled = false;
+        if (data.error) { setActionResult('result-swap', data.error, 'error'); return; }
+        var msg = 'Swap complete!';
+        if (data.amountOut) msg += '\nReceived: ' + data.amountOut + ' SELFCLAW';
+        if (data.txHash) msg += '\nTx: ' + data.txHash;
+        setActionResult('result-swap', msg, 'success');
+        loadSelfclawBalance();
+        loadWalletBalances();
+      })
+      .catch(function(e) {
+        btn.disabled = false;
+        if (e.message === 'auth') return;
+        setActionResult('result-swap', 'Failed: ' + e.message, 'error');
+      });
+    }
+
+    function doCheckPosition(btn) {
+      var posId = document.getElementById('check-position-id').value.trim();
+      if (!posId) return;
+      btn.disabled = true;
+      setActionResult('result-check-position', 'Loading position...', 'loading');
+      fetch('/api/admin/uniswap/position/' + encodeURIComponent(posId), { headers: authHeaders() })
+      .then(function(r) {
+        if (handleAuthError(r)) throw new Error('auth');
+        return r.json();
+      })
+      .then(function(data) {
+        btn.disabled = false;
+        if (data.error) { setActionResult('result-check-position', data.error, 'error'); return; }
+        var p = data.position || {};
+        var f = data.uncollectedFees || {};
+        var msg = 'Token0: ' + (p.token0 || '—') +
+          '\nToken1: ' + (p.token1 || '—') +
+          '\nFee: ' + (p.fee || '—') +
+          '\nLiquidity: ' + (p.liquidity || '—') +
+          '\nUncollected Token0: ' + (f.token0Fees || '0') +
+          '\nUncollected Token1: ' + (f.token1Fees || '0');
+        setActionResult('result-check-position', msg, 'success');
+      })
+      .catch(function(e) {
+        btn.disabled = false;
+        if (e.message === 'auth') return;
+        setActionResult('result-check-position', 'Failed: ' + e.message, 'error');
+      });
+    }
+
+    function doCreatePool(btn) {
+      var tokenA = document.getElementById('pool-token-a').value.trim();
+      var tokenB = document.getElementById('pool-token-b').value.trim();
+      var amountA = document.getElementById('pool-amount-a').value.trim();
+      var amountB = document.getElementById('pool-amount-b').value.trim();
+      var feeTier = parseInt(document.getElementById('pool-fee-tier').value);
+      if (!tokenA || !tokenB || !amountA || !amountB) return;
+      btn.disabled = true;
+      setActionResult('result-create-pool', 'Creating pool and adding liquidity...', 'loading');
+      fetch('/api/admin/uniswap/create-pool', {
+        method: 'POST', headers: authHeaders(),
+        body: JSON.stringify({ tokenA: tokenA, tokenB: tokenB, amountA: amountA, amountB: amountB, feeTier: feeTier })
+      })
+      .then(function(r) {
+        if (handleAuthError(r)) throw new Error('auth');
+        return r.json();
+      })
+      .then(function(data) {
+        btn.disabled = false;
+        if (data.error) { setActionResult('result-create-pool', data.error, 'error'); return; }
+        var msg = 'Pool created!';
+        if (data.poolAddress) msg += '\nPool: ' + data.poolAddress;
+        if (data.positionTokenId) msg += '\nPosition ID: ' + data.positionTokenId;
+        if (data.txHash) msg += '\nTx: ' + data.txHash;
+        setActionResult('result-create-pool', msg, 'success');
+        loadSelfclawBalance();
+        loadWalletBalances();
+      })
+      .catch(function(e) {
+        btn.disabled = false;
+        if (e.message === 'auth') return;
+        setActionResult('result-create-pool', 'Failed: ' + e.message, 'error');
+      });
+    }
+
+    function loadActivityLog() {
+      var el = document.getElementById('activity-log');
+      el.innerHTML = '<div class="log-empty"><span class="spinner"></span> Loading...</div>';
+
+      fetch('/api/admin/activity-log', { headers: authHeaders() })
+        .then(function(r) {
+          if (handleAuthError(r)) throw new Error('auth');
+          if (!r.ok) throw new Error('Server error (' + r.status + ')');
+          return r.json();
+        })
+        .then(function(data) {
+          var items = Array.isArray(data) ? data : (data.activities || data.log || []);
+          if (!items.length) {
+            el.innerHTML = '<div class="log-empty">No activity yet</div>';
+            return;
+          }
+          var html = '';
+          items.forEach(function(item) {
+            html += '<div class="log-item">' +
+              '<span class="log-type">' + (item.type || item.action || 'event') + '</span>' +
+              '<span class="log-detail">' + (item.detail || item.message || item.description || JSON.stringify(item)) + '</span>' +
+              '<span class="log-time">' + timeAgo(item.createdAt || item.created_at || item.timestamp) + '</span>' +
+            '</div>';
+          });
+          el.innerHTML = html;
+        })
+        .catch(function(e) {
+          if (e.message === 'auth') return;
+          el.innerHTML = '<div class="log-empty" style="color:#ef4444;">Failed to load activity log</div>';
+        });
+    }
+
+    (function() {
+      var token = getToken();
+      if (token) {
+        showDashboard();
+      }
+    })();
+  </script>
+  <script src="/nav-toggle.js"></script>
+</body>
+</html>
