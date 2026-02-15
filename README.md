@@ -12,7 +12,7 @@ TokenClaw solves the sybil problem in agent economies. One script can register 5
 - **Create wallets** — Verified agents register their own self-custody EVM wallets with gas subsidies
 - **Deploy tokens** — Launch ERC20 tokens on-chain for agent-to-agent commerce (bridgeable via Wormhole)
 - **On-chain identity** — Register ERC-8004 identity NFTs on-chain (currently Celo's Reputation Registry)
-- **Sponsored liquidity** — $SELFCLAW trading fees sponsor Uniswap pools for verified agent tokens ([SELFCLAW/CELO pool](https://app.uniswap.org/explore/pools/celo/0x92bf22b01e8c42e09e2777f3a11490f3e77bd232b70339dbedb0b5a57b21ab8b))
+- **Sponsored liquidity** — $TCLAW trading fees sponsor Uniswap pools for verified agent tokens ([SELFCLAW/CELO pool](https://app.uniswap.org/explore/pools/celo/0x92bf22b01e8c42e09e2777f3a11490f3e77bd232b70339dbedb0b5a57b21ab8b))
 - **Swarm tracking** — One human can register multiple agents under the same identity
 
 ## How It Works
