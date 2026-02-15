@@ -120,7 +120,7 @@ function generateChallenge(sessionId: string, agentKeyHash: string): string {
   const timestamp = Date.now();
   const nonce = crypto.randomBytes(16).toString("hex");
   return JSON.stringify({
-    domain: "selfclaw.ai",
+    domain: "tokenclaw.xyz",
     action: "verify-agent",
     sessionId,
     agentKeyHash,
@@ -336,7 +336,7 @@ router.post("/v1/start-verification", verificationLimiter, async (req: Request, 
     const selfApp = new SelfAppBuilder({
       version: 2,
       appName: "TokenClaw",
-      logoBase64: "https://selfclaw.ai/favicon.png",
+      logoBase64: "https://tokenclaw.xyz/favicon.png",
       scope: SELFCLAW_SCOPE,
       endpoint: SELFCLAW_ENDPOINT,
       endpointType: SELFCLAW_STAGING ? "staging_https" : "https",
@@ -756,7 +756,7 @@ router.get("/v1/status/:sessionId", publicApiLimiter, async (req: Request, res: 
           },
           nextSteps: {
             message: "Your agent is verified! Unlock the token economy.",
-            command: "Read https://selfclaw.ai/agent-economy.md to deploy tokens, create liquidity pools, and trade with other agents.",
+            command: "Read https://tokenclaw.xyz/agent-economy.md to deploy tokens, create liquidity pools, and trade with other agents.",
             features: [
               "Deploy your own ERC20 token",
               "Create Uniswap liquidity pools",
@@ -820,7 +820,7 @@ router.get("/v1/agent", publicApiLimiter, async (req: Request, res: Response) =>
 
     const qRepData: any = {
       hasErc8004: !!qPublicMetadata.erc8004TokenId,
-      endpoint: `https://selfclaw.ai/api/selfclaw/v1/agent/${encodeURIComponent(foundAgent.publicKey)}/reputation`,
+      endpoint: `https://tokenclaw.xyz/api/selfclaw/v1/agent/${encodeURIComponent(foundAgent.publicKey)}/reputation`,
       registryAddress: erc8004Service.getReputationRegistryAddress()
     };
     if (qPublicMetadata.erc8004TokenId) {
@@ -842,14 +842,14 @@ router.get("/v1/agent", publicApiLimiter, async (req: Request, res: Response) =>
       proof: {
         available: !!qZkProof,
         hash: qZkProof?.proofHash || null,
-        endpoint: `https://selfclaw.ai/api/selfclaw/v1/agent/${encodeURIComponent(foundAgent.publicKey)}/proof`
+        endpoint: `https://tokenclaw.xyz/api/selfclaw/v1/agent/${encodeURIComponent(foundAgent.publicKey)}/proof`
       },
       reputation: qRepData,
-      swarm: foundAgent.humanId ? `https://selfclaw.ai/human/${foundAgent.humanId}` : null,
+      swarm: foundAgent.humanId ? `https://tokenclaw.xyz/human/${foundAgent.humanId}` : null,
       metadata: qCleanMetadata,
       economy: {
         enabled: true,
-        playbook: "https://selfclaw.ai/agent-economy.md",
+        playbook: "https://tokenclaw.xyz/agent-economy.md",
         capabilities: ["deploy_token", "create_liquidity_pool", "swap_tokens", "aave_supply", "invoke_skill"]
       }
     });
@@ -1073,7 +1073,7 @@ router.get("/v1/agent/:identifier", publicApiLimiter, async (req: Request, res: 
 
     const reputationData: any = {
       hasErc8004: !!publicMetadata.erc8004TokenId,
-      endpoint: `https://selfclaw.ai/api/selfclaw/v1/agent/${encodeURIComponent(foundAgent.publicKey)}/reputation`,
+      endpoint: `https://tokenclaw.xyz/api/selfclaw/v1/agent/${encodeURIComponent(foundAgent.publicKey)}/reputation`,
       registryAddress: erc8004Service.getReputationRegistryAddress()
     };
     if (publicMetadata.erc8004TokenId) {
@@ -1095,14 +1095,14 @@ router.get("/v1/agent/:identifier", publicApiLimiter, async (req: Request, res: 
       proof: {
         available: !!zkProof,
         hash: zkProof?.proofHash || null,
-        endpoint: `https://selfclaw.ai/api/selfclaw/v1/agent/${encodeURIComponent(foundAgent.publicKey)}/proof`
+        endpoint: `https://tokenclaw.xyz/api/selfclaw/v1/agent/${encodeURIComponent(foundAgent.publicKey)}/proof`
       },
       reputation: reputationData,
-      swarm: foundAgent.humanId ? `https://selfclaw.ai/human/${foundAgent.humanId}` : null,
+      swarm: foundAgent.humanId ? `https://tokenclaw.xyz/human/${foundAgent.humanId}` : null,
       metadata: cleanMetadata,
       economy: {
         enabled: true,
-        playbook: "https://selfclaw.ai/agent-economy.md",
+        playbook: "https://tokenclaw.xyz/agent-economy.md",
         capabilities: ["deploy_token", "create_liquidity_pool", "swap_tokens", "aave_supply", "invoke_skill"]
       }
     });
@@ -1147,7 +1147,7 @@ router.post("/v1/verify", async (_req: Request, res: Response) => {
   res.status(410).json({
     error: "This endpoint is deprecated",
     message: "Use the Self.xyz verification flow instead: POST /api/selfclaw/v1/start-verification",
-    docs: "https://selfclaw.ai/developers"
+    docs: "https://tokenclaw.xyz/developers"
   });
 });
 
@@ -1679,7 +1679,7 @@ router.get("/v1/reputation-leaderboard", publicApiLimiter, async (req: Request, 
           hasAttestation: !!meta.erc8004Attestation?.txHash,
           reputation: summary || { totalFeedback: 0, averageScore: 0, lastUpdated: 0 },
           explorerUrl: erc8004Service.getExplorerUrl(tokenId),
-          reputationEndpoint: `https://selfclaw.ai/api/selfclaw/v1/agent/${encodeURIComponent(agent.publicKey)}/reputation`
+          reputationEndpoint: `https://tokenclaw.xyz/api/selfclaw/v1/agent/${encodeURIComponent(agent.publicKey)}/reputation`
         };
       })
     );
@@ -1830,7 +1830,7 @@ router.post("/v1/reputation/feedback", feedbackLimiter, async (req: Request, res
       0,
       tag1 || "peer-review",
       tag2 || "hackathon",
-      `https://selfclaw.ai/api/selfclaw/v1/agent/${encodeURIComponent(auth.publicKey)}`,
+      `https://tokenclaw.xyz/api/selfclaw/v1/agent/${encodeURIComponent(auth.publicKey)}`,
       feedbackURI || "",
       feedbackHash
     );
@@ -2117,11 +2117,11 @@ router.get("/v1/wallet-verify/:address", publicApiLimiter, async (req: Request, 
         scan8004Url: meta.erc8004TokenId ? `https://www.8004scan.io/agents/${meta.erc8004TokenId}` : null
       },
       swarm: {
-        endpoint: `https://selfclaw.ai/api/selfclaw/v1/human/${agent.humanId}`,
+        endpoint: `https://tokenclaw.xyz/api/selfclaw/v1/human/${agent.humanId}`,
       },
       lookup: {
-        agentEndpoint: `https://selfclaw.ai/api/selfclaw/v1/agent/${encodeURIComponent(agent.publicKey)}`,
-        proofEndpoint: `https://selfclaw.ai/api/selfclaw/v1/agent/${encodeURIComponent(agent.publicKey)}/proof`
+        agentEndpoint: `https://tokenclaw.xyz/api/selfclaw/v1/agent/${encodeURIComponent(agent.publicKey)}`,
+        proofEndpoint: `https://tokenclaw.xyz/api/selfclaw/v1/agent/${encodeURIComponent(agent.publicKey)}/proof`
       }
     });
   } catch (error: any) {
@@ -2612,7 +2612,7 @@ router.post("/v1/register-erc8004", verificationLimiter, async (req: Request, re
       });
     }
 
-    const domain = "selfclaw.ai";
+    const domain = "tokenclaw.xyz";
     const agentIdentifier = agent.publicKey || agent.deviceId;
 
     const registrationJson = generateRegistrationFile(
@@ -3428,7 +3428,7 @@ router.post("/v1/create-agent", verificationLimiter, async (req: any, res: Respo
     if (!req.session?.isAuthenticated || !req.session?.humanId) {
       return res.status(401).json({
         error: "Login required",
-        hint: "You must be logged in with Self.xyz passport to create an agent. Visit selfclaw.ai and click LOGIN."
+        hint: "You must be logged in with Self.xyz passport to create an agent. Visit tokenclaw.xyz and click LOGIN."
       });
     }
 
@@ -3501,7 +3501,7 @@ services:
     environment:
       - AGENT_NAME=${cleanName}
       - AGENT_PUBLIC_KEY=${publicKeySpki}
-      - SELFCLAW_API=https://selfclaw.ai/api/selfclaw/v1
+      - SELFCLAW_API=https://tokenclaw.xyz/api/selfclaw/v1
     volumes:
       - ./${cleanName}-data:/app/data
     command: >
@@ -3513,7 +3513,7 @@ services:
 
         const AGENT_NAME = process.env.AGENT_NAME || '${cleanName}';
         const PUBLIC_KEY = process.env.AGENT_PUBLIC_KEY || '${publicKeySpki}';
-        const SELFCLAW_API = process.env.SELFCLAW_API || 'https://selfclaw.ai/api/selfclaw/v1';
+        const SELFCLAW_API = process.env.SELFCLAW_API || 'https://tokenclaw.xyz/api/selfclaw/v1';
 
         console.log('[' + AGENT_NAME + '] Agent started');
         console.log('[' + AGENT_NAME + '] Public Key: ' + PUBLIC_KEY);
@@ -3561,7 +3561,7 @@ services:
         agentKeyHash,
         verificationLevel: "human-created",
         registeredAt: new Date().toISOString(),
-        profileUrl: `https://selfclaw.ai/agent/${encodeURIComponent(cleanName)}`,
+        profileUrl: `https://tokenclaw.xyz/agent/${encodeURIComponent(cleanName)}`,
       },
       keys: {
         publicKey: publicKeySpki,

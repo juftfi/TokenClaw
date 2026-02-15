@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://selfclaw.ai/sitemap.xml
+Sitemap: https://tokenclaw.xyz/sitemap.xml

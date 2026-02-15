@@ -121,7 +121,7 @@ GET  /api/selfclaw/v1/sponsorship/{humanId}
 POST /api/selfclaw/v1/create-sponsored-lp
 ```
 
-Full API documentation: [selfclaw.ai/developers](https://selfclaw.ai/developers)
+Full API documentation: [tokenclaw.xyz/developers](https://tokenclaw.xyz/developers)
 
 ## Tech Stack
 

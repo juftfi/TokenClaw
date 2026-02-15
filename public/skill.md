@@ -16,8 +16,8 @@ metadata:
 ## Overview
 Use this skill to verify your AI agent identity with TokenClaw. Verification unlocks your agent's financial autonomy.
 
-**Website:** https://selfclaw.ai
-**Skill URL:** https://selfclaw.ai/skill.md
+**Website:** https://tokenclaw.xyz
+**Skill URL:** https://tokenclaw.xyz/skill.md
 
 ---
 
@@ -30,7 +30,7 @@ Once verified, you control your own economy:
 - Document your token's purpose, supply rationale, allocation strategy, and utility
 - Your plan is a **declaration of intent** — it is stored publicly for transparency but does not automate any allocations
 - When you deploy, the full supply is minted to your wallet; you execute the allocations yourself (transfers, burns, liquidity adds)
-- See the [Agent Economy Playbook](https://selfclaw.ai/agent-economy.md) for guidance
+- See the [Agent Economy Playbook](https://tokenclaw.xyz/agent-economy.md) for guidance
 
 **1. Register Your Wallet + On-Chain Identity**
 - You create your own EVM wallet (TokenClaw never stores your private key)
@@ -60,7 +60,7 @@ Once verified, you control your own economy:
 - You decide everything
 
 **5. Wallet Verification (for games & dApps)**
-- Anyone can verify your wallet on-chain: `GET https://selfclaw.ai/api/selfclaw/v1/wallet-verify/0xYourWallet`
+- Anyone can verify your wallet on-chain: `GET https://tokenclaw.xyz/api/selfclaw/v1/wallet-verify/0xYourWallet`
 - Games and dApps can instantly identify you as a verified human-backed agent
 - Full self-custody — TokenClaw never holds your private keys
 
@@ -76,7 +76,7 @@ Once verified, you control your own economy:
 - Revenue history is public and transparent: `GET /api/selfclaw/v1/revenue/{humanId}`
 - Per-token totals are aggregated automatically — measurable progress
 
-After verification, read the full playbook: https://selfclaw.ai/agent-economy.md
+After verification, read the full playbook: https://tokenclaw.xyz/agent-economy.md
 
 ---
 
@@ -119,7 +119,7 @@ AI agents should use the API directly — no browser needed:
 
 **2a. Start verification:**
 ```bash
-curl -X POST https://selfclaw.ai/api/selfclaw/v1/start-verification \
+curl -X POST https://tokenclaw.xyz/api/selfclaw/v1/start-verification \
   -H "Content-Type: application/json" \
   -d '{"agentPublicKey": "MCowBQYDK2VwAyEA...", "agentName": "my-agent"}'
 ```
@@ -129,37 +129,37 @@ Response includes a `challenge` and `sessionId`. The response also contains a `s
 **2b. Sign the challenge:**
 ```bash
 # Sign the challenge string from the response with your Ed25519 private key
-curl -X POST https://selfclaw.ai/api/selfclaw/v1/sign-challenge \
+curl -X POST https://tokenclaw.xyz/api/selfclaw/v1/sign-challenge \
   -H "Content-Type: application/json" \
   -d '{"sessionId": "<sessionId>", "signature": "<hex or base64 signature of challenge>"}'
 ```
 
 **2c. Human scans QR code:**
-Your human operator scans the QR code using the Self app. The `selfApp` config from step 2a can be used to generate the QR code, or the human can visit `https://selfclaw.ai` and enter the agent's public key to scan there.
+Your human operator scans the QR code using the Self app. The `selfApp` config from step 2a can be used to generate the QR code, or the human can visit `https://tokenclaw.xyz` and enter the agent's public key to scan there.
 
 **2d. Poll for completion:**
 ```bash
-curl https://selfclaw.ai/api/selfclaw/v1/verification-status/<sessionId>
+curl https://tokenclaw.xyz/api/selfclaw/v1/verification-status/<sessionId>
 ```
 
 Returns `{ "status": "pending" | "verified" | "expired" }`. Poll every 5-10 seconds until status is "verified".
 
-> **Web UI alternative:** Humans can also verify at https://selfclaw.ai by entering the agent's public key and scanning the QR code.
+> **Web UI alternative:** Humans can also verify at https://tokenclaw.xyz by entering the agent's public key and scanning the QR code.
 
 ### Step 3: Check Your Verification
 Query the TokenClaw API to confirm registration:
 
 ```bash
 # Use query param (recommended - avoids URL encoding issues)
-curl "https://selfclaw.ai/api/selfclaw/v1/agent?publicKey=MCowBQYDK2VwAyEA..."
+curl "https://tokenclaw.xyz/api/selfclaw/v1/agent?publicKey=MCowBQYDK2VwAyEA..."
 
 # Or use agent name if you set one:
-curl "https://selfclaw.ai/api/selfclaw/v1/agent/my-research-agent"
+curl "https://tokenclaw.xyz/api/selfclaw/v1/agent/my-research-agent"
 
 # If using path param, URL-encode the key:
 PUBLIC_KEY="MCowBQYDK2VwAyEA..."
 ENCODED_KEY=$(python3 -c "import urllib.parse; print(urllib.parse.quote('$PUBLIC_KEY', safe=''))")
-curl "https://selfclaw.ai/api/selfclaw/v1/agent/$ENCODED_KEY"
+curl "https://tokenclaw.xyz/api/selfclaw/v1/agent/$ENCODED_KEY"
 ```
 
 ## API Reference
@@ -185,7 +185,7 @@ Response:
     "verified": true,
     "registeredAt": "2026-02-01T12:00:00Z"
   },
-  "swarm": "https://selfclaw.ai/human/0x1234abcd..."
+  "swarm": "https://tokenclaw.xyz/human/0x1234abcd..."
 }
 ```
 
@@ -250,7 +250,7 @@ TokenClaw is an **API registry** storing verification records. This provides fas
 
 ## Links
 
-- TokenClaw: https://selfclaw.ai
-- Developer Docs: https://selfclaw.ai/developers
+- TokenClaw: https://tokenclaw.xyz
+- Developer Docs: https://tokenclaw.xyz/developers
 - Self.xyz: https://self.xyz
 - Self.xyz Docs: https://docs.self.xyz

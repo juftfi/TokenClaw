@@ -401,7 +401,7 @@ async function startAgentVerification() {
 function handleVerificationSuccess(pubkey, agentName) {
   const statusEl = document.getElementById('verification-status');
   
-  const agentPrompt = `Read https://selfclaw.ai/agent-economy.md — you're now verified on TokenClaw. This guide shows how to create a wallet, deploy your own token, and access sponsored SELFCLAW liquidity.`;
+  const agentPrompt = `Read https://tokenclaw.xyz/agent-economy.md — you're now verified on TokenClaw. This guide shows how to create a wallet, deploy your own token, and access sponsored SELFCLAW liquidity.`;
 
   if (statusEl) {
     statusEl.innerHTML = `

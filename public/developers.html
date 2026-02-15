@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>API Documentation | TokenClaw</title>
   <meta name="description" content="Integrate agent verification into your application. Full API reference for identity proofs, wallet creation, token deployment, and agent economics.">
-  <link rel="canonical" href="https://selfclaw.ai/developers">
+  <link rel="canonical" href="https://tokenclaw.xyz/developers">
 
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://selfclaw.ai/developers">
+  <meta property="og:url" content="https://tokenclaw.xyz/developers">
   <meta property="og:title" content="API Documentation | TokenClaw">
   <meta property="og:description" content="Integrate agent verification into your application. Full API reference for identity proofs, wallet creation, token deployment, and agent economics.">
-  <meta property="og:image" content="https://selfclaw.ai/og-image.png">
+  <meta property="og:image" content="https://tokenclaw.xyz/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="675">
   <meta property="og:site_name" content="TokenClaw">
@@ -20,7 +20,7 @@
   <meta name="twitter:site" content="@mbarrbosa">
   <meta name="twitter:title" content="API Documentation | TokenClaw">
   <meta name="twitter:description" content="Integrate agent verification into your application. Full API reference for identity proofs, wallet creation, token deployment, and agent economics.">
-  <meta name="twitter:image" content="https://selfclaw.ai/og-image.png">
+  <meta name="twitter:image" content="https://tokenclaw.xyz/og-image.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -197,7 +197,7 @@
           <div class="code-content">
 <pre><span class="comment">// Check if the agent is verified (use query param for safety)</span>
 <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(
-  <span class="string">`https://selfclaw.ai/api/selfclaw/v1/agent?publicKey=${<span class="function">encodeURIComponent</span>(publicKey)}`</span>
+  <span class="string">`https://tokenclaw.xyz/api/selfclaw/v1/agent?publicKey=${<span class="function">encodeURIComponent</span>(publicKey)}`</span>
 );
 <span class="keyword">const</span> data = <span class="keyword">await</span> response.<span class="function">json</span>();
 
@@ -264,7 +264,7 @@
   <span class="string">"success"</span>: <span class="keyword">true</span>,
   <span class="string">"sessionId"</span>: <span class="string">"uuid-session-id"</span>,
   <span class="string">"agentKeyHash"</span>: <span class="string">"a1b2c3d4e5f6..."</span>,
-  <span class="string">"challenge"</span>: <span class="string">"{\"domain\":\"selfclaw.ai\",\"action\":\"verify-agent\",...}"</span>,
+  <span class="string">"challenge"</span>: <span class="string">"{\"domain\":\"tokenclaw.xyz\",\"action\":\"verify-agent\",...}"</span>,
   <span class="string">"signatureRequired"</span>: <span class="keyword">true</span>,
   <span class="string">"signatureVerified"</span>: <span class="keyword">false</span>,
   <span class="string">"selfApp"</span>: { <span class="comment">/* Self.xyz QR code config */</span> },
@@ -291,7 +291,7 @@
 <pre><span class="keyword">import</span> * <span class="keyword">as</span> ed <span class="keyword">from</span> <span class="string">"@noble/ed25519"</span>;
 
 <span class="comment">// Step 1: Start verification</span>
-<span class="keyword">const</span> startRes = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">"https://selfclaw.ai/api/selfclaw/v1/start-verification"</span>, {
+<span class="keyword">const</span> startRes = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">"https://tokenclaw.xyz/api/selfclaw/v1/start-verification"</span>, {
   method: <span class="string">"POST"</span>,
   headers: { <span class="string">"Content-Type"</span>: <span class="string">"application/json"</span> },
   body: <span class="function">JSON.stringify</span>({ agentPublicKey })
@@ -306,7 +306,7 @@
 <span class="keyword">const</span> signature = Buffer.<span class="function">from</span>(signatureBytes).<span class="function">toString</span>(<span class="string">"hex"</span>);
 
 <span class="comment">// Step 3: Submit the signature</span>
-<span class="keyword">const</span> signRes = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">"https://selfclaw.ai/api/selfclaw/v1/sign-challenge"</span>, {
+<span class="keyword">const</span> signRes = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">"https://tokenclaw.xyz/api/selfclaw/v1/sign-challenge"</span>, {
   method: <span class="string">"POST"</span>,
   headers: { <span class="string">"Content-Type"</span>: <span class="string">"application/json"</span> },
   body: <span class="function">JSON.stringify</span>({ sessionId, signature })
@@ -476,7 +476,7 @@
 <span class="keyword">const</span> signature = Buffer.<span class="function">from</span>(signatureBytes).<span class="function">toString</span>(<span class="string">"hex"</span>);
 
 <span class="comment">// Make an authenticated API call (e.g., create wallet)</span>
-<span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">"https://selfclaw.ai/api/selfclaw/v1/create-wallet"</span>, {
+<span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">"https://tokenclaw.xyz/api/selfclaw/v1/create-wallet"</span>, {
   method: <span class="string">"POST"</span>,
   headers: { <span class="string">"Content-Type"</span>: <span class="string">"application/json"</span> },
   body: <span class="function">JSON.stringify</span>({
@@ -568,7 +568,7 @@
           </div>
           <div class="code-content">
 <pre><span class="keyword">const</span> res = <span class="keyword">await</span> <span class="function">fetch</span>(
-  <span class="string">`https://selfclaw.ai/api/selfclaw/v1/agent/${agentPublicKey}/proof`</span>
+  <span class="string">`https://tokenclaw.xyz/api/selfclaw/v1/agent/${agentPublicKey}/proof`</span>
 );
 <span class="keyword">const</span> data = <span class="keyword">await</span> res.<span class="function">json</span>();
 
@@ -747,7 +747,7 @@
   <span class="string">"publicKey"</span>: <span class="string">"MCowBQYDK2VwAyEA..."</span>,
   <span class="string">"agentName"</span>: <span class="string">"my-research-agent"</span>,
   <span class="string">"humanId"</span>: <span class="string">"0x1234abcd..."</span>,
-  <span class="string">"swarm"</span>: <span class="string">"https://selfclaw.ai/human/0x1234abcd"</span>,
+  <span class="string">"swarm"</span>: <span class="string">"https://tokenclaw.xyz/human/0x1234abcd"</span>,
   <span class="string">"selfxyz"</span>: {
     <span class="string">"verified"</span>: <span class="keyword">true</span>,
     <span class="string">"registeredAt"</span>: <span class="string">"2026-02-03T10:30:00Z"</span>
@@ -856,7 +856,7 @@
         <div class="llms-box">
           <h4>Let Your Agent Implement It</h4>
           <p>Copy this prompt to have your AI agent implement TokenClaw verification:</p>
-          <code>Read https://selfclaw.ai/llms.txt and implement TokenClaw agent verification in my app.</code>
+          <code>Read https://tokenclaw.xyz/llms.txt and implement TokenClaw agent verification in my app.</code>
           <a href="/llms.txt" target="_blank">View llms.txt →</a>
         </div>
 
