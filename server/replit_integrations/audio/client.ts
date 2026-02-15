@@ -116,7 +116,7 @@ export async function voiceChat(
   inputFormat: "wav" | "mp3" = "wav",
   outputFormat: "wav" | "mp3" = "mp3"
 ): Promise<{ transcript: string; audioResponse: Buffer }> {
-  const audioBase64 = audioBuffer.toString("base64");
+  const audioBSC64 = audioBuffer.toString("base64");
   const response = await openai.chat.completions.create({
     model: "gpt-audio",
     modalities: ["text", "audio"],
@@ -124,7 +124,7 @@ export async function voiceChat(
     messages: [{
       role: "user",
       content: [
-        { type: "input_audio", input_audio: { data: audioBase64, format: inputFormat } },
+        { type: "input_audio", input_audio: { data: audioBSC64, format: inputFormat } },
       ],
     }],
   });
@@ -152,7 +152,7 @@ export async function voiceChatStream(
   voice: "alloy" | "echo" | "fable" | "onyx" | "nova" | "shimmer" = "alloy",
   inputFormat: "wav" | "mp3" = "wav"
 ): Promise<AsyncIterable<{ type: "transcript" | "audio"; data: string }>> {
-  const audioBase64 = audioBuffer.toString("base64");
+  const audioBSC64 = audioBuffer.toString("base64");
   const stream = await openai.chat.completions.create({
     model: "gpt-audio",
     modalities: ["text", "audio"],
@@ -160,7 +160,7 @@ export async function voiceChatStream(
     messages: [{
       role: "user",
       content: [
-        { type: "input_audio", input_audio: { data: audioBase64, format: inputFormat } },
+        { type: "input_audio", input_audio: { data: audioBSC64, format: inputFormat } },
       ],
     }],
     stream: true,

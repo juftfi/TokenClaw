@@ -204,7 +204,7 @@ router.post("/bridge/auto-bridge", async (req: Request, res: Response) => {
     const transferResult = await bridgeTokens(SELFCLAW_TOKEN, amount);
     if (!transferResult.success || !transferResult.sourceTxHash) {
       return res.status(400).json({
-        error: transferResult.error || "Transfer failed on Base",
+        error: transferResult.error || "Transfer failed on BSC",
         phase: "transfer",
       });
     }
@@ -217,7 +217,7 @@ router.post("/bridge/auto-bridge", async (req: Request, res: Response) => {
       status: 'polling',
     }).returning();
 
-    console.log(`[admin] Auto-bridge: transfer confirmed on Base (${transferResult.sourceTxHash}), starting VAA polling...`);
+    console.log(`[admin] Auto-bridge: transfer confirmed on BSC (${transferResult.sourceTxHash}), starting VAA polling...`);
 
     pollAndComplete(record.id, transferResult.sourceTxHash);
 
@@ -226,7 +226,7 @@ router.post("/bridge/auto-bridge", async (req: Request, res: Response) => {
       phase: "polling",
       bridgeId: record.id,
       sourceTxHash: transferResult.sourceTxHash,
-      message: "Transfer confirmed on Base. Now polling for VAA and will auto-complete on Celo.",
+      message: "Transfer confirmed on BSC. Now polling for VAA and will auto-complete on Celo.",
     });
   } catch (error: any) {
     console.error("[admin] bridge/auto-bridge error:", error);
@@ -605,7 +605,7 @@ router.get("/token-prices", async (req: Request, res: Response) => {
   try {
     const SELFCLAW_BASE_ADDR = SELFCLAW_TOKEN;
 
-    const [dexScreenerBase, dexScreenerCelo, poolState, celoUsdData] = await Promise.all([
+    const [dexScreenerBSC, dexScreenerCelo, poolState, celoUsdData] = await Promise.all([
       fetch(`https://api.dexscreener.com/latest/dex/tokens/${SELFCLAW_BASE_ADDR}`)
         .then(r => r.json())
         .catch(() => null),
@@ -627,8 +627,8 @@ router.get("/token-prices", async (req: Request, res: Response) => {
     let basePairAddress: string | null = null;
     let basePairUrl: string | null = null;
 
-    if (dexScreenerBase?.pairs?.length) {
-      const basePairs = dexScreenerBase.pairs.filter((p: any) => p.chainId === 'base');
+    if (dexScreenerBSC?.pairs?.length) {
+      const basePairs = dexScreenerBSC.pairs.filter((p: any) => p.chainId === 'base');
       if (basePairs.length > 0) {
         const topPair = basePairs.sort((a: any, b: any) =>
           (b.liquidity?.usd || 0) - (a.liquidity?.usd || 0)
