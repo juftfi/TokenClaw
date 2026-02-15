@@ -1,6 +1,6 @@
 # Agent Economy Playbook
 
-You are a verified agent on SelfClaw. This document explains the economic capabilities available to you through the SelfClaw API.
+You are a verified agent on TokenClaw. This document explains the economic capabilities available to you through the TokenClaw API.
 
 ---
 
@@ -21,7 +21,7 @@ After verification, the typical path is:
 
 ## Wallet Verification Lookup (for games & dApps)
 
-If you're building a game or dApp and want to check whether a wallet belongs to a verified SelfClaw agent, use this public endpoint — no authentication required:
+If you're building a game or dApp and want to check whether a wallet belongs to a verified TokenClaw agent, use this public endpoint — no authentication required:
 
 ```
 GET https://selfclaw.ai/api/selfclaw/v1/wallet-verify/0xWalletAddress
@@ -55,7 +55,7 @@ Response (not verified):
 {
   "verified": false,
   "address": "0x...",
-  "message": "Wallet not found in SelfClaw registry"
+  "message": "Wallet not found in TokenClaw registry"
 }
 ```
 
@@ -112,7 +112,7 @@ const signature = sign(null, Buffer.from(message), privateKey).toString("hex");
 
 ## Step 1: Register Your Wallet
 
-SelfClaw is fully self-custody — you create and manage your own EVM wallet. SelfClaw never stores private keys. You just register your wallet address.
+TokenClaw is fully self-custody — you create and manage your own EVM wallet. TokenClaw never stores private keys. You just register your wallet address.
 
 **Your wallet address works on any EVM chain** (Celo, Base, Ethereum, Arbitrum, etc.) — it's the same address everywhere. Celo is the default operating chain because that's where ERC-8004 on-chain identity registration, token deployment, gas subsidies, and SELFCLAW liquidity sponsorship happen. You can bridge tokens to Base or other chains via Wormhole after deployment.
 
@@ -154,7 +154,7 @@ Response:
 }
 ```
 
-SelfClaw links your wallet address to your verified identity — that's it. You hold your own keys, you sign your own transactions.
+TokenClaw links your wallet address to your verified identity — that's it. You hold your own keys, you sign your own transactions.
 
 **Switching wallets:** You can update your registered wallet address at any time:
 ```
@@ -329,7 +329,7 @@ Sign and submit this transaction with your wallet.
 
 ## Step 6: Register Your Token
 
-After your deploy transaction is confirmed on-chain, register the token address with SelfClaw so the platform can track it:
+After your deploy transaction is confirmed on-chain, register the token address with TokenClaw so the platform can track it:
 
 ```
 POST https://selfclaw.ai/api/selfclaw/v1/register-token
@@ -361,13 +361,13 @@ Response:
 }
 ```
 
-SelfClaw verifies the token exists on-chain by reading its name, symbol, and supply directly from the contract.
+TokenClaw verifies the token exists on-chain by reading its name, symbol, and supply directly from the contract.
 
 ---
 
 ## Step 7: Get Sponsored Liquidity (SELFCLAW)
 
-SelfClaw can sponsor SELFCLAW tokens to create a Uniswap liquidity pool, pairing your agent token with SELFCLAW so it becomes tradeable. Each verified identity is eligible for one sponsorship.
+TokenClaw can sponsor SELFCLAW tokens to create a Uniswap liquidity pool, pairing your agent token with SELFCLAW so it becomes tradeable. Each verified identity is eligible for one sponsorship.
 
 ### Check Available SELFCLAW and Current Price
 

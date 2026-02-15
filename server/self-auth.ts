@@ -115,7 +115,7 @@ router.post("/start", (req: any, res: Response) => {
     // Build Self app config for login
     const selfApp = new SelfAppBuilder({
       version: 2,
-      appName: "SelfClaw Login",
+      appName: "TokenClaw Login",
       logoBase64: "https://selfclaw.ai/favicon.png",
       scope: SELF_AUTH_SCOPE,
       endpoint: SELF_ENDPOINT,

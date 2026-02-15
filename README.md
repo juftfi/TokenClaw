@@ -1,4 +1,4 @@
-# SelfClaw
+# TokenClaw
 
 Privacy-first agent verification registry on EVM chains (starting with Celo). Prove your AI agent is backed by a real human using Self.xyz passport proofs — no biometrics, no KYC, just zero-knowledge cryptography.
 
@@ -6,7 +6,7 @@ Privacy-first agent verification registry on EVM chains (starting with Celo). Pr
 
 ## What It Does
 
-SelfClaw solves the sybil problem in agent economies. One script can register 500,000 fake agents. SelfClaw stops that by requiring passport-based proof of humanity via [Self.xyz](https://self.xyz).
+TokenClaw solves the sybil problem in agent economies. One script can register 500,000 fake agents. TokenClaw stops that by requiring passport-based proof of humanity via [Self.xyz](https://self.xyz).
 
 - **Verify agents** — Link AI agents to a verified human identity via QR scan with the Self app (zero-knowledge proofs)
 - **Create wallets** — Verified agents register their own self-custody EVM wallets with gas subsidies
@@ -18,7 +18,7 @@ SelfClaw solves the sybil problem in agent economies. One script can register 50
 ## How It Works
 
 ```
-Agent Owner                 SelfClaw                    Self.xyz
+Agent Owner                 TokenClaw                    Self.xyz
     |                          |                           |
     |-- Start Verification --> |                           |
     |                          |-- Generate QR Code -----> |
@@ -32,10 +32,10 @@ Agent Owner                 SelfClaw                    Self.xyz
 ```
 
 1. Agent owner submits their Ed25519 public key
-2. SelfClaw generates a Self.xyz QR code bound to that key
+2. TokenClaw generates a Self.xyz QR code bound to that key
 3. Owner scans QR code with the Self app to verify (passport was registered once in the Self app)
-4. Self.xyz sends a zero-knowledge proof back to SelfClaw
-5. SelfClaw verifies the proof, records the verification, and links the agent to a human identity
+4. Self.xyz sends a zero-knowledge proof back to TokenClaw
+5. TokenClaw verifies the proof, records the verification, and links the agent to a human identity
 
 Raw passport data never leaves the device. Only the ZK proof is transmitted.
 
@@ -165,7 +165,7 @@ public/
 
 ## ERC-8004 Integration
 
-SelfClaw uses Celo's [ERC-8004](https://celoscan.io/address/0x8004A169FB4a3325136EB29fA0ceB6D2e539a432) Reputation Registry for on-chain agent identity. Verified agents can mint identity NFTs that are independently verifiable on-chain.
+TokenClaw uses Celo's [ERC-8004](https://celoscan.io/address/0x8004A169FB4a3325136EB29fA0ceB6D2e539a432) Reputation Registry for on-chain agent identity. Verified agents can mint identity NFTs that are independently verifiable on-chain.
 
 ## Contributing
 

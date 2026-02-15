@@ -3,22 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>API Documentation | SelfClaw</title>
+  <title>API Documentation | TokenClaw</title>
   <meta name="description" content="Integrate agent verification into your application. Full API reference for identity proofs, wallet creation, token deployment, and agent economics.">
   <link rel="canonical" href="https://selfclaw.ai/developers">
 
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://selfclaw.ai/developers">
-  <meta property="og:title" content="API Documentation | SelfClaw">
+  <meta property="og:title" content="API Documentation | TokenClaw">
   <meta property="og:description" content="Integrate agent verification into your application. Full API reference for identity proofs, wallet creation, token deployment, and agent economics.">
   <meta property="og:image" content="https://selfclaw.ai/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="675">
-  <meta property="og:site_name" content="SelfClaw">
+  <meta property="og:site_name" content="TokenClaw">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@mbarrbosa">
-  <meta name="twitter:title" content="API Documentation | SelfClaw">
+  <meta name="twitter:title" content="API Documentation | TokenClaw">
   <meta name="twitter:description" content="Integrate agent verification into your application. Full API reference for identity proofs, wallet creation, token deployment, and agent economics.">
   <meta name="twitter:image" content="https://selfclaw.ai/og-image.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -43,21 +43,21 @@
     </header>
 
     <div class="docs-container">
-      <a href="/" class="back-link">← Back to SelfClaw</a>
+      <a href="/" class="back-link">← Back to TokenClaw</a>
 
       <div class="docs-header">
         <h1 class="docs-title">Developer Integration</h1>
-        <p class="docs-subtitle">Most "AI agents" are just REST APIs. Anyone with an API key can fake being an agent. SelfClaw provides cryptographic proof of humanity using Self.xyz passport verification.</p>
+        <p class="docs-subtitle">Most "AI agents" are just REST APIs. Anyone with an API key can fake being an agent. TokenClaw provides cryptographic proof of humanity using Self.xyz passport verification.</p>
       </div>
 
       <div class="highlight-box">
-        <h4>Why SelfClaw?</h4>
+        <h4>Why TokenClaw?</h4>
         <p>Passport-first verification with Self.xyz zero-knowledge proofs. Works in 180+ countries with any NFC-enabled passport. Raw passport data never leaves your device — only the proof is shared.</p>
       </div>
 
       <div class="highlight-box">
-        <h4>Self + SelfClaw</h4>
-        <p><strong>Self</strong> provides the zero-knowledge proof. <strong>SelfClaw</strong> defines the open verification standard — an open spec with optional on-chain registry on Celo. Anyone can validate results without trusting our API.</p>
+        <h4>Self + TokenClaw</h4>
+        <p><strong>Self</strong> provides the zero-knowledge proof. <strong>TokenClaw</strong> defines the open verification standard — an open spec with optional on-chain registry on Celo. Anyone can validate results without trusting our API.</p>
       </div>
 
       <nav class="docs-nav">
@@ -70,18 +70,18 @@
         <a href="#check-verification">Check Agent</a>
         <a href="#api-reference">API Reference</a>
         <a href="#security">Security</a>
-        <a href="#selfclaw-standard">SelfClaw Standard</a>
+        <a href="#selfclaw-standard">TokenClaw Standard</a>
         <a href="#llms">For AI Agents</a>
       </nav>
 
       <section id="comparison" class="docs-section">
-        <h2>Self.xyz + SelfClaw</h2>
-        <p>SelfClaw uses Self.xyz for passport-based identity verification with zero-knowledge proofs. Here's what makes this approach special:</p>
+        <h2>Self.xyz + TokenClaw</h2>
+        <p>TokenClaw uses Self.xyz for passport-based identity verification with zero-knowledge proofs. Here's what makes this approach special:</p>
 
         <table class="comparison-table">
           <tr>
             <th>Feature</th>
-            <th class="highlight">SelfClaw + Self.xyz</th>
+            <th class="highlight">TokenClaw + Self.xyz</th>
           </tr>
           <tr>
             <td>Verification Method</td>
@@ -108,7 +108,7 @@
 
       <section id="how-it-works" class="docs-section">
         <h2>How It Works</h2>
-        <p>SelfClaw uses Self.xyz's zero-knowledge proof system to verify passport ownership without exposing personal data. Here's the flow:</p>
+        <p>TokenClaw uses Self.xyz's zero-knowledge proof system to verify passport ownership without exposing personal data. Here's the flow:</p>
 
         <div class="step-flow">
           <div class="step-card">
@@ -124,7 +124,7 @@
           <div class="step-card">
             <div class="step-number">3</div>
             <h4>Check Registry</h4>
-            <p>Query SelfClaw API to confirm the key is registered with passport verification.</p>
+            <p>Query TokenClaw API to confirm the key is registered with passport verification.</p>
           </div>
         </div>
       </section>
@@ -186,8 +186,8 @@
           </div>
         </div>
 
-        <h3>Step 3: Check SelfClaw Registry</h3>
-        <p>Query the SelfClaw API to verify the public key is registered with passport verification.</p>
+        <h3>Step 3: Check TokenClaw Registry</h3>
+        <p>Query the TokenClaw API to verify the public key is registered with passport verification.</p>
 
         <div class="code-block">
           <div class="code-header">
@@ -214,7 +214,7 @@
 
       <section id="agent-registration" class="docs-section">
         <h2>Agent Registration API</h2>
-        <p>Registering an agent with SelfClaw is a multi-step flow. This section covers each step, the exact formats, and how to sign correctly.</p>
+        <p>Registering an agent with TokenClaw is a multi-step flow. This section covers each step, the exact formats, and how to sign correctly.</p>
 
         <h3>Registration Flow Overview</h3>
         <div class="step-flow">
@@ -268,7 +268,7 @@
   <span class="string">"signatureRequired"</span>: <span class="keyword">true</span>,
   <span class="string">"signatureVerified"</span>: <span class="keyword">false</span>,
   <span class="string">"selfApp"</span>: { <span class="comment">/* Self.xyz QR code config */</span> },
-  <span class="string">"config"</span>: { <span class="comment">/* SelfClaw app config */</span> }
+  <span class="string">"config"</span>: { <span class="comment">/* TokenClaw app config */</span> }
 }</pre>
           </div>
         </div>
@@ -324,7 +324,7 @@
         <p>The <code>/v1/sign-challenge</code> endpoint accepts signatures in <strong>hex</strong> (128 hex characters) or <strong>base64</strong> (44 characters) encoding. Both formats are auto-detected. The decoded signature must be exactly 64 bytes (Ed25519).</p>
 
         <h3>Public Key Format</h3>
-        <p>Both common Ed25519 public key formats are accepted. SelfClaw auto-detects and handles both:</p>
+        <p>Both common Ed25519 public key formats are accepted. TokenClaw auto-detects and handles both:</p>
 
         <div class="code-block">
           <div class="code-header">
@@ -333,7 +333,7 @@
           <div class="code-content">
 <pre><span class="comment">// Format 1: SPKI DER base64 (44 bytes decoded, starts with MCow...)</span>
 <span class="string">"MCowBQYDK2VwAyEAx1Yp..."</span>
-<span class="comment">// SelfClaw strips the 12-byte SPKI header automatically</span>
+<span class="comment">// TokenClaw strips the 12-byte SPKI header automatically</span>
 
 <span class="comment">// Format 2: Raw 32-byte base64</span>
 <span class="string">"x1Yp..."</span>
@@ -360,7 +360,7 @@
         <div class="api-endpoint">
           <span class="api-method post">POST</span>
           <span class="api-path">/api/selfclaw/v1/create-wallet</span>
-          <p class="api-desc">Register your EVM wallet address. Your address works on any EVM chain (Celo, Base, Ethereum, etc.). Celo is currently the primary operating chain for gas subsidies, ERC-8004 identity, token deployment, and SELFCLAW sponsorship. Self-custody only — SelfClaw never stores private keys.</p>
+          <p class="api-desc">Register your EVM wallet address. Your address works on any EVM chain (Celo, Base, Ethereum, etc.). Celo is currently the primary operating chain for gas subsidies, ERC-8004 identity, token deployment, and SELFCLAW sponsorship. Self-custody only — TokenClaw never stores private keys.</p>
         </div>
         <div class="api-endpoint">
           <span class="api-method post">POST</span>
@@ -488,7 +488,7 @@
         </div>
 
         <h3>Signature Encoding for Authenticated Requests</h3>
-        <p>SelfClaw auto-detects the encoding. Both hex and base64 are accepted:</p>
+        <p>TokenClaw auto-detects the encoding. Both hex and base64 are accepted:</p>
 
         <div class="code-block">
           <div class="code-header">
@@ -546,11 +546,11 @@
 
       <section id="trustless-verification" class="docs-section">
         <h2>Trustless Proof Verification</h2>
-        <p>You don't have to trust SelfClaw. Every verified agent's zero-knowledge proof is publicly available. Retrieve it and verify independently using the Self.xyz SDK.</p>
+        <p>You don't have to trust TokenClaw. Every verified agent's zero-knowledge proof is publicly available. Retrieve it and verify independently using the Self.xyz SDK.</p>
 
         <div class="highlight-box">
           <h4>Why this matters</h4>
-          <p>Traditional registries require you to trust the registry operator. SelfClaw publishes the raw ZK proof so anyone can independently confirm an agent's human backing — cryptographically, without trusting our API.</p>
+          <p>Traditional registries require you to trust the registry operator. TokenClaw publishes the raw ZK proof so anyone can independently confirm an agent's human backing — cryptographically, without trusting our API.</p>
         </div>
 
         <h3>Step 1: Fetch the Proof</h3>
@@ -584,7 +584,7 @@
         </div>
 
         <h3>Step 2: Verify Independently</h3>
-        <p>Use the Self.xyz SDK to verify the proof without trusting SelfClaw at all.</p>
+        <p>Use the Self.xyz SDK to verify the proof without trusting TokenClaw at all.</p>
 
         <div class="code-block">
           <div class="code-header">
@@ -690,7 +690,7 @@
         <div class="api-endpoint">
           <span class="api-method post">POST</span>
           <span class="api-path">/api/selfclaw/v1/reputation/attest</span>
-          <p class="api-desc">Submit a SelfClaw verification attestation to the ERC-8004 Reputation Registry. Requires <code>agentPublicKey</code> and <code>erc8004TokenId</code>.</p>
+          <p class="api-desc">Submit a TokenClaw verification attestation to the ERC-8004 Reputation Registry. Requires <code>agentPublicKey</code> and <code>erc8004TokenId</code>.</p>
         </div>
 
         <h3>Response Fields</h3>
@@ -822,12 +822,12 @@
       </section>
 
       <section id="selfclaw-standard" class="docs-section">
-        <h2>SelfClaw Standard</h2>
-        <p>SelfClaw defines an open verification standard — an open spec that anyone can validate without trusting our API.</p>
+        <h2>TokenClaw Standard</h2>
+        <p>TokenClaw defines an open verification standard — an open spec that anyone can validate without trusting our API.</p>
 
         <div class="highlight-box">
-          <h4>What is SelfClaw?</h4>
-          <p><strong>Self</strong> provides the zero-knowledge proof. <strong>SelfClaw</strong> defines the open verification standard with a canonical challenge format and proof-to-key binding rules. Anyone can verify results independently.</p>
+          <h4>What is TokenClaw?</h4>
+          <p><strong>Self</strong> provides the zero-knowledge proof. <strong>TokenClaw</strong> defines the open verification standard with a canonical challenge format and proof-to-key binding rules. Anyone can verify results independently.</p>
         </div>
 
         <h3>Challenge Format</h3>
@@ -846,7 +846,7 @@
         </div>
 
         <h3>Trust Model</h3>
-        <p>SelfClaw is an <strong>API registry</strong> storing verification records in PostgreSQL. This provides fast lookups without blockchain fees. Optional on-chain anchoring on Celo is planned for stronger decentralization guarantees.</p>
+        <p>TokenClaw is an <strong>API registry</strong> storing verification records in PostgreSQL. This provides fast lookups without blockchain fees. Optional on-chain anchoring on Celo is planned for stronger decentralization guarantees.</p>
       </section>
 
       <section id="llms" class="docs-section">
@@ -855,8 +855,8 @@
 
         <div class="llms-box">
           <h4>Let Your Agent Implement It</h4>
-          <p>Copy this prompt to have your AI agent implement SelfClaw verification:</p>
-          <code>Read https://selfclaw.ai/llms.txt and implement SelfClaw agent verification in my app.</code>
+          <p>Copy this prompt to have your AI agent implement TokenClaw verification:</p>
+          <code>Read https://selfclaw.ai/llms.txt and implement TokenClaw agent verification in my app.</code>
           <a href="/llms.txt" target="_blank">View llms.txt →</a>
         </div>
 
@@ -876,7 +876,7 @@
           </li>
           <li>
             <span class="security-num">•</span>
-            <span class="security-content">Why SelfClaw is the privacy-first choice</span>
+            <span class="security-content">Why TokenClaw is the privacy-first choice</span>
           </li>
         </ul>
       </section>
@@ -893,7 +893,7 @@
         </nav>
         <div class="footer-meta">
           <span>Powered by <a href="https://self.xyz" target="_blank">Self.xyz</a> zero-knowledge proofs</span>
-          <span>Built by <a href="https://zeno.vision" target="_blank" rel="noopener">Zeno</a> · <a href="https://github.com/mbarbosa30/SelfClaw" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/+GC2quXBnarw1MzU0" target="_blank" rel="noopener">Telegram</a></span>
+          <span>Built by <a href="https://zeno.vision" target="_blank" rel="noopener">Zeno</a> · <a href="https://github.com/mbarbosa30/TokenClaw" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/+GC2quXBnarw1MzU0" target="_blank" rel="noopener">Telegram</a></span>
         </div>
       </footer>
     </div>
@@ -933,7 +933,7 @@
           resultDiv.innerHTML = `
             <div class="result-unverified">
               <h4>✗ Not Found</h4>
-              <p>This agent is not registered in the SelfClaw registry.</p>
+              <p>This agent is not registered in the TokenClaw registry.</p>
             </div>
           `;
           return;
@@ -958,7 +958,7 @@
           resultDiv.innerHTML = `
             <div class="result-unverified">
               <h4>✗ Not Verified</h4>
-              <p>This agent is not registered in the SelfClaw registry.</p>
+              <p>This agent is not registered in the TokenClaw registry.</p>
             </div>
           `;
         }

@@ -3,24 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SelfClaw | $SELFCLAW Token Whitepaper</title>
+  <title>TokenClaw | $SELFCLAW Token Whitepaper</title>
   <meta name="description" content="$SELFCLAW whitepaper: a fair-launch token powering the agent verification economy. Fee-recycling flywheel, cross-chain liquidity, and sponsored agent tokens on Celo.">
 
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://selfclaw.ai/whitepaper">
-  <meta property="og:title" content="SelfClaw | $SELFCLAW Token Whitepaper">
+  <meta property="og:title" content="TokenClaw | $SELFCLAW Token Whitepaper">
   <meta property="og:description" content="Fair-launch tokenomics, fee-recycling flywheel, cross-chain liquidity from Base to Celo, and sponsored agent tokens. No team supply, no dump risk.">
   <meta property="og:image" content="https://selfclaw.ai/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="675">
-  <meta property="og:site_name" content="SelfClaw">
+  <meta property="og:site_name" content="TokenClaw">
 
   <link rel="canonical" href="https://selfclaw.ai/whitepaper">
   <meta name="keywords" content="$SELFCLAW, whitepaper, tokenomics, fair launch, Clanker, Bankr, agent economy, fee recycling, cross-chain, Base, Celo, liquidity, verified agents">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@mbarrbosa">
-  <meta name="twitter:title" content="SelfClaw | $SELFCLAW Token Whitepaper">
+  <meta name="twitter:title" content="TokenClaw | $SELFCLAW Token Whitepaper">
   <meta name="twitter:description" content="Fair-launch tokenomics, fee-recycling flywheel, cross-chain liquidity, and sponsored agent tokens. No team supply, no dump risk.">
   <meta name="twitter:image" content="https://selfclaw.ai/og-image.png">
 
@@ -95,7 +95,7 @@
       <div class="wp-section-num">Section 01</div>
       <h2>Abstract</h2>
       <p>
-        $SELFCLAW is the native token of the SelfClaw agent verification registry &mdash; a protocol that binds AI agents to verified human identities using zero-knowledge proofs from passport NFC chips via Self.xyz.
+        $SELFCLAW is the native token of the TokenClaw agent verification registry &mdash; a protocol that binds AI agents to verified human identities using zero-knowledge proofs from passport NFC chips via Self.xyz.
       </p>
       <p>
         The token was launched via Clanker through Bankr as a fair launch with no team allocation, no pre-sale, and no insider supply. The project receives revenue solely through trading fees, making it structurally impossible for the team to dump on holders. The vision is to recycle these fees back into the ecosystem: bridging them from Base to Celo, converting them into liquidity, and using them to sponsor the creation of new agent tokens &mdash; creating a self-sustaining flywheel that could grow with every verified agent.
@@ -132,7 +132,7 @@
       <div class="wp-section-num">Section 03</div>
       <h2>Protocol Design</h2>
       <p>
-        SelfClaw's verification protocol establishes a cryptographic link between an AI agent's Ed25519 key pair and a verified human identity, using zero-knowledge proofs derived from passport NFC chips.
+        TokenClaw's verification protocol establishes a cryptographic link between an AI agent's Ed25519 key pair and a verified human identity, using zero-knowledge proofs derived from passport NFC chips.
       </p>
 
       <h3>Verification Flow</h3>
@@ -143,7 +143,7 @@
         </div>
         <div class="wp-arrow">&rarr;</div>
         <div class="wp-node">
-          <div class="wp-node-label">SelfClaw</div>
+          <div class="wp-node-label">TokenClaw</div>
           <div class="wp-node-value">Challenge</div>
         </div>
         <div class="wp-arrow">&rarr;</div>
@@ -159,7 +159,7 @@
       </div>
 
       <ol>
-        <li><strong>Key Registration</strong> &mdash; The agent submits its Ed25519 public key to SelfClaw and receives a cryptographic challenge.</li>
+        <li><strong>Key Registration</strong> &mdash; The agent submits its Ed25519 public key to TokenClaw and receives a cryptographic challenge.</li>
         <li><strong>Challenge Signing</strong> &mdash; The agent signs the challenge with its private key, proving ownership of the key pair.</li>
         <li><strong>Identity Verification</strong> &mdash; The agent's owner scans a QR code using the Self mobile app. A zero-knowledge proof is generated from their pre-registered passport that proves humanity and age (18+) without revealing any personal data.</li>
         <li><strong>On-Chain Identity</strong> &mdash; Upon successful verification, an ERC-8004 non-transferable NFT is minted on Celo, permanently recording the agent's verified status on-chain.</li>
@@ -341,7 +341,7 @@
 
       <h3>Bridging Strategy</h3>
       <p>
-        Cross-chain token transfers between Base and Celo can leverage the bridging infrastructure already supported by the Celo ecosystem, including Wormhole, Hyperlane, LayerZero, and the LI.FI aggregator. SelfClaw currently uses Wormhole for SELFCLAW bridging from Base to Celo.
+        Cross-chain token transfers between Base and Celo can leverage the bridging infrastructure already supported by the Celo ecosystem, including Wormhole, Hyperlane, LayerZero, and the LI.FI aggregator. TokenClaw currently uses Wormhole for SELFCLAW bridging from Base to Celo.
       </p>
 
       <table class="wp-table">
@@ -381,17 +381,17 @@
       <div class="wp-section-num">Section 07</div>
       <h2>Agent Token Ecosystem</h2>
       <p>
-        Once verified, agents could deploy their own ERC-20 tokens through SelfClaw. These tokens are not speculative assets &mdash; they could represent programmable units of value tied to real agent capabilities.
+        Once verified, agents could deploy their own ERC-20 tokens through TokenClaw. These tokens are not speculative assets &mdash; they could represent programmable units of value tied to real agent capabilities.
       </p>
 
       <h3>Token Deployment</h3>
       <p>
-        Any verified agent could deploy a token through the SelfClaw API. The deployment process would create the ERC-20 contract on-chain (currently Celo) and, if sponsorship liquidity is available, automatically create a TOKEN/SELFCLAW liquidity pool. The LP position is held by the SelfClaw sponsor wallet and is intended to remain permanent &mdash; though it is not locked in a separate smart contract.
+        Any verified agent could deploy a token through the TokenClaw API. The deployment process would create the ERC-20 contract on-chain (currently Celo) and, if sponsorship liquidity is available, automatically create a TOKEN/SELFCLAW liquidity pool. The LP position is held by the TokenClaw sponsor wallet and is intended to remain permanent &mdash; though it is not locked in a separate smart contract.
       </p>
 
       <h3>Sponsored Liquidity</h3>
       <p>
-        New agent tokens could be paired with $SELFCLAW from the sponsorship reserve (funded by the fee recycling flywheel). This liquidity is designed to be permanent &mdash; the LP position is held by the SelfClaw sponsor wallet with the intent to never withdraw. While the position is not locked in a separate time-lock contract, the project's zero-supply structure means there is no incentive to remove it. Future iterations may implement on-chain time-locks for additional assurance.
+        New agent tokens could be paired with $SELFCLAW from the sponsorship reserve (funded by the fee recycling flywheel). This liquidity is designed to be permanent &mdash; the LP position is held by the TokenClaw sponsor wallet with the intent to never withdraw. While the position is not locked in a separate time-lock contract, the project's zero-supply structure means there is no incentive to remove it. Future iterations may implement on-chain time-locks for additional assurance.
       </p>
 
       <div class="wp-diagram">
@@ -401,7 +401,7 @@
         </div>
         <div class="wp-arrow">&rarr;</div>
         <div class="wp-node">
-          <div class="wp-node-label">SelfClaw</div>
+          <div class="wp-node-label">TokenClaw</div>
           <div class="wp-node-value">Seeds SELFCLAW</div>
         </div>
         <div class="wp-arrow">&rarr;</div>
@@ -484,7 +484,7 @@
       <div class="wp-section-num">Section 09 &mdash; Future Vision</div>
       <h2>Governance &amp; Agent DAOs</h2>
       <p>
-        Individual agents are powerful. Organized agents could be transformative. SelfClaw's verification layer enables agents to form decentralized autonomous organizations &mdash; pooling tokens, sharing governance, and coordinating as swarms.
+        Individual agents are powerful. Organized agents could be transformative. TokenClaw's verification layer enables agents to form decentralized autonomous organizations &mdash; pooling tokens, sharing governance, and coordinating as swarms.
       </p>
 
       <div class="wp-grid">
@@ -592,7 +592,7 @@
 
       <h3>Smart Contract Risk</h3>
       <p>
-        The SelfClaw protocol interacts with multiple smart contracts &mdash; ERC-20 token deployments, Uniswap pool creation, and ERC-8004 identity minting. While these contracts use well-audited primitives (OpenZeppelin, Uniswap), the SelfClaw-specific contracts have not undergone a formal third-party audit. Bugs or vulnerabilities could result in loss of funds or incorrect verification states.
+        The TokenClaw protocol interacts with multiple smart contracts &mdash; ERC-20 token deployments, Uniswap pool creation, and ERC-8004 identity minting. While these contracts use well-audited primitives (OpenZeppelin, Uniswap), the TokenClaw-specific contracts have not undergone a formal third-party audit. Bugs or vulnerabilities could result in loss of funds or incorrect verification states.
       </p>
 
       <h3>Bridge Risk</h3>
@@ -607,7 +607,7 @@
 
       <h3>Liquidity Risk</h3>
       <p>
-        Sponsored LP positions are held by the SelfClaw sponsor wallet and are not locked in a time-lock contract. While the project has no incentive to withdraw (zero team supply), the positions are technically withdrawable. Additionally, the sponsorship amount depends on available SELFCLAW in the sponsor wallet, which fluctuates with fee collection and bridge activity.
+        Sponsored LP positions are held by the TokenClaw sponsor wallet and are not locked in a time-lock contract. While the project has no incentive to withdraw (zero team supply), the positions are technically withdrawable. Additionally, the sponsorship amount depends on available SELFCLAW in the sponsor wallet, which fluctuates with fee collection and bridge activity.
       </p>
 
       <h3>Regulatory Uncertainty</h3>
@@ -703,7 +703,7 @@
       </nav>
       <div class="footer-meta">
         <span>Powered by <a href="https://self.xyz" target="_blank">Self.xyz</a> zero-knowledge proofs</span>
-        <span>Built by <a href="https://zeno.vision" target="_blank" rel="noopener">Zeno</a> · <a href="https://github.com/mbarbosa30/SelfClaw" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/+GC2quXBnarw1MzU0" target="_blank" rel="noopener">Telegram</a></span>
+        <span>Built by <a href="https://zeno.vision" target="_blank" rel="noopener">Zeno</a> · <a href="https://github.com/mbarbosa30/TokenClaw" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/+GC2quXBnarw1MzU0" target="_blank" rel="noopener">Telegram</a></span>
       </div>
     </footer>
   </div>

@@ -158,7 +158,7 @@ export class ERC8004Service {
     }
   }
   
-  // Submit SelfClaw verification attestation to reputation registry
+  // Submit TokenClaw verification attestation to reputation registry
   async submitVerificationAttestation(
     agentTokenId: string,
     signerPrivateKey?: string

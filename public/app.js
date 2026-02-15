@@ -64,7 +64,7 @@ function initLookupWidget() {
         lookupResult.className = 'lookup-result not-verified';
         lookupResult.innerHTML = `
           <span class="status-badge not-verified">Not Verified</span>
-          <div>This agent is not registered in SelfClaw.</div>
+          <div>This agent is not registered in TokenClaw.</div>
         `;
       }
       lookupResult.style.display = 'block';
@@ -214,7 +214,7 @@ async function checkAgentVerification() {
       resultEl.className = 'check-result not-verified';
       resultEl.innerHTML = `
         <h4 class="not-verified-badge">NOT VERIFIED</h4>
-        <p>${data.message || 'This agent is not registered in the SelfClaw registry.'}</p>
+        <p>${data.message || 'This agent is not registered in the TokenClaw registry.'}</p>
       `;
     }
   } catch (error) {
@@ -232,7 +232,7 @@ const WS_DB_RELAYER = 'wss://websocket.self.xyz';
 const REDIRECT_URL = 'https://redirect.self.xyz';
 
 function connectToSelfRelayer(sessionId, selfAppConfig, onSuccess, onError) {
-  console.log('[SelfClaw] Connecting to Self.xyz WebSocket relayer...');
+  console.log('[TokenClaw] Connecting to Self.xyz WebSocket relayer...');
   
   const socket = io(WS_DB_RELAYER + '/websocket', {
     query: { sessionId },
@@ -242,20 +242,20 @@ function connectToSelfRelayer(sessionId, selfAppConfig, onSuccess, onError) {
   });
   
   socket.on('connect', () => {
-    console.log('[SelfClaw] WebSocket connected! Transport:', socket.io.engine.transport.name);
+    console.log('[TokenClaw] WebSocket connected! Transport:', socket.io.engine.transport.name);
     socket.emit('register_session', {
       sessionId,
       selfApp: selfAppConfig
     });
-    console.log('[SelfClaw] Session registered with relayer');
+    console.log('[TokenClaw] Session registered with relayer');
   });
   
   socket.on('connect_error', (error) => {
-    console.error('[SelfClaw] WebSocket connection error:', error);
+    console.error('[TokenClaw] WebSocket connection error:', error);
   });
   
   socket.on('mobile_status', (data) => {
-    console.log('[SelfClaw] Mobile status update:', data);
+    console.log('[TokenClaw] Mobile status update:', data);
     const statusEl = document.getElementById('verification-status');
     
     if (data.status === 'mobile_connected') {
@@ -274,7 +274,7 @@ function connectToSelfRelayer(sessionId, selfAppConfig, onSuccess, onError) {
   });
   
   socket.on('disconnect', (reason) => {
-    console.log('[SelfClaw] WebSocket disconnected:', reason);
+    console.log('[TokenClaw] WebSocket disconnected:', reason);
   });
   
   return socket;
@@ -323,19 +323,19 @@ async function startAgentVerification() {
     const wsSessionId = selfAppConfig.sessionId;
     selfSocket = connectToSelfRelayer(wsSessionId, selfAppConfig, 
       () => {
-        console.log('[SelfClaw] Verification successful via WebSocket!');
+        console.log('[TokenClaw] Verification successful via WebSocket!');
         handleVerificationSuccess(pubkey, agentName);
       },
       (err) => {
-        console.error('[SelfClaw] Verification error via WebSocket:', err);
+        console.error('[TokenClaw] Verification error via WebSocket:', err);
       }
     );
     
     const selfUniversalLink = `${REDIRECT_URL}?selfApp=${encodeURIComponent(JSON.stringify(selfAppConfig))}`;
     
-    console.log('[SelfClaw] Using deeplink mode with WebSocket for status updates');
-    console.log('[SelfClaw] QR Config:', JSON.stringify(selfAppConfig, null, 2));
-    console.log('[SelfClaw] Universal Link:', selfUniversalLink);
+    console.log('[TokenClaw] Using deeplink mode with WebSocket for status updates');
+    console.log('[TokenClaw] QR Config:', JSON.stringify(selfAppConfig, null, 2));
+    console.log('[TokenClaw] Universal Link:', selfUniversalLink);
     
     const signatureStatus = data.signatureVerified 
       ? '<span style="color: #FF6B4A;">Agent key ownership verified</span>'
@@ -401,7 +401,7 @@ async function startAgentVerification() {
 function handleVerificationSuccess(pubkey, agentName) {
   const statusEl = document.getElementById('verification-status');
   
-  const agentPrompt = `Read https://selfclaw.ai/agent-economy.md — you're now verified on SelfClaw. This guide shows how to create a wallet, deploy your own token, and access sponsored SELFCLAW liquidity.`;
+  const agentPrompt = `Read https://selfclaw.ai/agent-economy.md — you're now verified on TokenClaw. This guide shows how to create a wallet, deploy your own token, and access sponsored SELFCLAW liquidity.`;
 
   if (statusEl) {
     statusEl.innerHTML = `

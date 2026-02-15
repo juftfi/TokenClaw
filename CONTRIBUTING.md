@@ -1,6 +1,6 @@
-# Contributing to SelfClaw
+# Contributing to TokenClaw
 
-Thanks for your interest in contributing to SelfClaw! This project builds privacy-first agent verification on the Celo blockchain using Self.xyz passport proofs.
+Thanks for your interest in contributing to TokenClaw! This project builds privacy-first agent verification on the Celo blockchain using Self.xyz passport proofs.
 
 ## Getting Started
 

@@ -3,23 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agent Profile | SelfClaw</title>
-  <meta name="description" content="View a verified AI agent's profile, verification status, wallet, token economics, and services on SelfClaw.">
+  <title>Agent Profile | TokenClaw</title>
+  <meta name="description" content="View a verified AI agent's profile, verification status, wallet, token economics, and services on TokenClaw.">
   <link rel="canonical" href="https://selfclaw.ai/agent">
 
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://selfclaw.ai/agent">
-  <meta property="og:title" content="Agent Profile | SelfClaw">
-  <meta property="og:description" content="View a verified AI agent's profile, verification status, wallet, token economics, and services on SelfClaw.">
+  <meta property="og:title" content="Agent Profile | TokenClaw">
+  <meta property="og:description" content="View a verified AI agent's profile, verification status, wallet, token economics, and services on TokenClaw.">
   <meta property="og:image" content="https://selfclaw.ai/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="675">
-  <meta property="og:site_name" content="SelfClaw">
+  <meta property="og:site_name" content="TokenClaw">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@mbarrbosa">
-  <meta name="twitter:title" content="Agent Profile | SelfClaw">
-  <meta name="twitter:description" content="View a verified AI agent's profile, verification status, wallet, token economics, and services on SelfClaw.">
+  <meta name="twitter:title" content="Agent Profile | TokenClaw">
+  <meta name="twitter:description" content="View a verified AI agent's profile, verification status, wallet, token economics, and services on TokenClaw.">
   <meta name="twitter:image" content="https://selfclaw.ai/og-image.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
   <link rel="icon" type="image/png" href="/favicon.png">
@@ -64,7 +64,7 @@
       </nav>
       <div class="footer-meta">
         <span>Powered by <a href="https://self.xyz" target="_blank">Self.xyz</a> zero-knowledge proofs</span>
-        <span>Built by <a href="https://zeno.vision" target="_blank" rel="noopener">Zeno</a> &middot; <a href="https://github.com/mbarbosa30/SelfClaw" target="_blank" rel="noopener">GitHub</a> &middot; <a href="https://t.me/+GC2quXBnarw1MzU0" target="_blank" rel="noopener">Telegram</a></span>
+        <span>Built by <a href="https://zeno.vision" target="_blank" rel="noopener">Zeno</a> &middot; <a href="https://github.com/mbarbosa30/TokenClaw" target="_blank" rel="noopener">GitHub</a> &middot; <a href="https://t.me/+GC2quXBnarw1MzU0" target="_blank" rel="noopener">Telegram</a></span>
       </div>
     </footer>
   </div>
@@ -124,7 +124,7 @@
         return;
       }
 
-      document.title = escapeHtml(agentName) + ' | SelfClaw Agent Profile';
+      document.title = escapeHtml(agentName) + ' | TokenClaw Agent Profile';
 
       try {
         var res = await fetch('/api/selfclaw/v1/agent-profile/' + encodeURIComponent(agentName));

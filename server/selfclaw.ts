@@ -258,7 +258,7 @@ async function authenticateAgent(req: Request, res: Response): Promise<{ publicK
     .limit(1);
 
   if (agentRecords.length === 0) {
-    res.status(403).json({ error: "Agent not found in SelfClaw registry. Verify first." });
+    res.status(403).json({ error: "Agent not found in TokenClaw registry. Verify first." });
     return null;
   }
 
@@ -275,7 +275,7 @@ router.get("/v1/config", (_req: Request, res: Response) => {
   res.json({
     scope: SELFCLAW_SCOPE,
     endpoint: SELFCLAW_ENDPOINT,
-    appName: "SelfClaw",
+    appName: "TokenClaw",
     version: 2
   });
 });
@@ -335,7 +335,7 @@ router.post("/v1/start-verification", verificationLimiter, async (req: Request, 
     const userDefinedData = agentKeyHash.padEnd(128, '0');
     const selfApp = new SelfAppBuilder({
       version: 2,
-      appName: "SelfClaw",
+      appName: "TokenClaw",
       logoBase64: "https://selfclaw.ai/favicon.png",
       scope: SELFCLAW_SCOPE,
       endpoint: SELFCLAW_ENDPOINT,
@@ -361,7 +361,7 @@ router.post("/v1/start-verification", verificationLimiter, async (req: Request, 
       config: {
         scope: SELFCLAW_SCOPE,
         endpoint: SELFCLAW_ENDPOINT,
-        appName: "SelfClaw",
+        appName: "TokenClaw",
         version: 2,
         staging: SELFCLAW_STAGING
       }
@@ -476,7 +476,7 @@ router.get("/v1/health", (req: Request, res: Response) => {
 router.get("/v1/callback", (req: Request, res: Response) => {
   res.status(200).json({ 
     status: "ok", 
-    message: "SelfClaw callback endpoint. Use POST to submit verification proofs.",
+    message: "TokenClaw callback endpoint. Use POST to submit verification proofs.",
     method: "GET not supported for verification"
   });
 });
@@ -485,7 +485,7 @@ router.get("/v1/callback", (req: Request, res: Response) => {
 router.get("/v1/callback/", (req: Request, res: Response) => {
   res.status(200).json({ 
     status: "ok", 
-    message: "SelfClaw callback endpoint. Use POST to submit verification proofs.",
+    message: "TokenClaw callback endpoint. Use POST to submit verification proofs.",
     method: "GET not supported for verification"
   });
 });
@@ -1407,7 +1407,7 @@ router.post("/v1/request-selfclaw-sponsorship", verificationLimiter, async (req:
       },
       nextSteps: [
         "Your token is now tradeable against SELFCLAW on Uniswap",
-        "Trading fees (1%) accrue to the SelfClaw treasury for future sponsorships",
+        "Trading fees (1%) accrue to the TokenClaw treasury for future sponsorships",
         `View pool on Uniswap: https://app.uniswap.org/explore/pools/celo/${result.poolAddress}`,
         "View on Celoscan: https://celoscan.io/address/" + (result.poolAddress || tokenAddress)
       ]
@@ -1925,7 +1925,7 @@ router.post("/v1/reputation/attest", verificationLimiter, async (req: Request, r
       txHash: attestation.txHash,
       explorerUrl: erc8004Service.getTxExplorerUrl(attestation.txHash),
       reputationRegistry: erc8004Service.getReputationRegistryAddress(),
-      message: "SelfClaw verification attestation submitted to ERC-8004 Reputation Registry"
+      message: "TokenClaw verification attestation submitted to ERC-8004 Reputation Registry"
     });
   } catch (error: any) {
     console.error("[selfclaw] reputation attest error:", error);
@@ -1944,7 +1944,7 @@ router.post("/v1/create-wallet", verificationLimiter, async (req: Request, res: 
     
     if (!walletAddress) {
       return res.status(400).json({ 
-        error: "walletAddress is required. SelfClaw never stores private keys — provide your own EVM wallet address."
+        error: "walletAddress is required. TokenClaw never stores private keys — provide your own EVM wallet address."
       });
     }
 
@@ -2079,7 +2079,7 @@ router.get("/v1/wallet-verify/:address", publicApiLimiter, async (req: Request, 
       return res.json({
         verified: false,
         address,
-        message: "Wallet not found in SelfClaw registry"
+        message: "Wallet not found in TokenClaw registry"
       });
     }
 
@@ -2617,7 +2617,7 @@ router.post("/v1/register-erc8004", verificationLimiter, async (req: Request, re
 
     const registrationJson = generateRegistrationFile(
       agentName || agent.deviceId || "Verified Agent",
-      description || "A verified AI agent on SelfClaw — passport-verified, sybil-resistant",
+      description || "A verified AI agent on TokenClaw — passport-verified, sybil-resistant",
       walletInfo.address,
       undefined,
       `https://${domain}`,
@@ -3517,7 +3517,7 @@ services:
 
         console.log('[' + AGENT_NAME + '] Agent started');
         console.log('[' + AGENT_NAME + '] Public Key: ' + PUBLIC_KEY);
-        console.log('[' + AGENT_NAME + '] SelfClaw API: ' + SELFCLAW_API);
+        console.log('[' + AGENT_NAME + '] TokenClaw API: ' + SELFCLAW_API);
         console.log('[' + AGENT_NAME + '] Ready for commands. Set AGENT_PRIVATE_KEY env var to enable signing.');
 
         setInterval(() => {
@@ -3567,7 +3567,7 @@ services:
         publicKey: publicKeySpki,
         privateKey: privateKeyPkcs8,
         format: "SPKI DER (base64) / PKCS8 DER (base64)",
-        warning: "SAVE YOUR PRIVATE KEY NOW. It will never be shown again. SelfClaw does not store private keys.",
+        warning: "SAVE YOUR PRIVATE KEY NOW. It will never be shown again. TokenClaw does not store private keys.",
       },
       deployment,
       nextSteps: [

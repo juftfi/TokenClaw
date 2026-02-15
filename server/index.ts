@@ -118,7 +118,7 @@ async function main() {
   app.listen(PORT, "0.0.0.0", () => {
     console.log(`
 ╔════════════════════════════════════════════════════════════╗
-║       SelfClaw Agent Verification Registry                ║
+║       TokenClaw Agent Verification Registry                ║
 ║       Running on port ${PORT}                                 ║
 ╚════════════════════════════════════════════════════════════╝
 `);
