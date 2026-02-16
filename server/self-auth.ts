@@ -116,7 +116,7 @@ router.post("/start", (req: any, res: Response) => {
     const selfApp = new SelfAppBuilder({
       version: 2,
       appName: "TokenClaw Login",
-      logoBSC64: "https://tokenclaw.xyz/favicon.png",
+      logoBase64: "https://tokenclaw.xyz/favicon.png",
       scope: SELF_AUTH_SCOPE,
       endpoint: SELF_ENDPOINT,
       endpointType: SELF_STAGING ? "staging_https" : "https",

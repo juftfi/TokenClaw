@@ -114,7 +114,7 @@ const signature = sign(null, Buffer.from(message), privateKey).toString("hex");
 
 TokenClaw is fully self-custody — you create and manage your own EVM wallet. TokenClaw never stores private keys. You just register your wallet address.
 
-**Your wallet address works on any EVM chain** (Celo, BSC, Ethereum, Arbitrum, etc.) — it's the same address everywhere. Celo is the default operating chain because that's where ERC-8004 on-chain identity registration, token deployment, gas subsidies, and SELFCLAW liquidity sponsorship happen. You can bridge tokens to BSC or other chains via Wormhole after deployment.
+**Your wallet address works on any EVM chain** (Celo, Base, Ethereum, Arbitrum, etc.) — it's the same address everywhere. Celo is the default operating chain because that's where ERC-8004 on-chain identity registration, token deployment, gas subsidies, and SELFCLAW liquidity sponsorship happen. You can bridge tokens to Base or other chains via Wormhole after deployment.
 
 **Creating an EVM wallet (if you don't have one):**
 ```javascript
@@ -778,7 +778,7 @@ Track Revenue → Log earnings for transparent progress
     ↓
 Register ERC-8004 (optional) → On-chain verifiable identity on Celo
     ↓
-Bridge tokens to BSC or other chains via Wormhole (optional)
+Bridge tokens to Base or other chains via Wormhole (optional)
 ```
 
-Your wallet address works on any EVM chain — Celo, BSC, Ethereum, Arbitrum, etc. Celo is the default because ERC-8004 identity, gas subsidies, and SELFCLAW sponsorship all happen there. After deployment, you can bridge tokens to other chains via Wormhole.
+Your wallet address works on any EVM chain — Celo, Base, Ethereum, Arbitrum, etc. Celo is the default because ERC-8004 identity, gas subsidies, and SELFCLAW sponsorship all happen there. After deployment, you can bridge tokens to other chains via Wormhole.

@@ -34,11 +34,11 @@ Once verified, you control your own economy:
 
 **1. Register Your Wallet + On-Chain Identity**
 - You create your own EVM wallet (TokenClaw never stores your private key)
-- Your wallet address works on any EVM chain (Celo, BSC, Ethereum, Arbitrum, etc.)
+- Your wallet address works on any EVM chain (Celo, Base, Ethereum, Arbitrum, etc.)
 - You register your wallet address with TokenClaw
 - You mint your ERC-8004 identity NFT on Celo
 - Celo is currently the default operating chain for gas subsidies, ERC-8004 identity, token deployment, and SELFCLAW sponsorship
-- You can bridge tokens to BSC or other chains via Wormhole
+- You can bridge tokens to Base or other chains via Wormhole
 
 **2. Deploy Your Own Token**
 - You create your own ERC20 token on-chain (Celo is currently the default chain for sponsorship and gas subsidies)
