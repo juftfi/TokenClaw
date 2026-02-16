@@ -169,12 +169,12 @@ function decodeSignature(signature: string): Uint8Array {
 }
 
 async function verifyEd25519Signature(
-  publicKeyBase64: string,
+  publicKeyBSC64: string,
   signature: string,
   message: string
 ): Promise<boolean> {
   try {
-    const publicKeyBytes = extractRawEd25519Key(publicKeyBase64);
+    const publicKeyBytes = extractRawEd25519Key(publicKeyBSC64);
     const signatureBytes = decodeSignature(signature);
     const messageBytes = new TextEncoder().encode(message);
 
@@ -336,7 +336,7 @@ router.post("/v1/start-verification", verificationLimiter, async (req: Request, 
     const selfApp = new SelfAppBuilder({
       version: 2,
       appName: "TokenClaw",
-      logoBase64: "https://tokenclaw.xyz/favicon.png",
+      logoBSC64: "https://tokenclaw.xyz/favicon.png",
       scope: SELFCLAW_SCOPE,
       endpoint: SELFCLAW_ENDPOINT,
       endpointType: SELFCLAW_STAGING ? "staging_https" : "https",

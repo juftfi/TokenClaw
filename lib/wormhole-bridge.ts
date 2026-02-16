@@ -132,7 +132,7 @@ function getAccount() {
   return privateKeyToAccount(PRIVATE_KEY as `0x${string}`);
 }
 
-function getBaseWalletClient() {
+function getBSCWalletClient() {
   const account = getAccount();
   return createWalletClient({
     account,
@@ -228,11 +228,11 @@ export async function attestToken(tokenAddress: string): Promise<BridgeResult> {
       return { success: false, error: 'CELO_PRIVATE_KEY not configured' };
     }
 
-    const walletClient = getBaseWalletClient();
+    const walletClient = getBSCWalletClient();
     const account = getAccount();
     const nonce = generateNonce();
 
-    console.log(`[wormhole-bridge] Attesting token ${tokenAddress} on Base TokenBridge...`);
+    console.log(`[wormhole-bridge] Attesting token ${tokenAddress} on BSC TokenBridge...`);
 
     const txHash = await walletClient.writeContract({
       address: TOKEN_BRIDGE_BASE,
@@ -325,7 +325,7 @@ export async function bridgeTokens(tokenAddress: string, amount: string): Promis
     }
 
     const account = getAccount();
-    const walletClient = getBaseWalletClient();
+    const walletClient = getBSCWalletClient();
 
     let decimals: number;
     try {
@@ -342,7 +342,7 @@ export async function bridgeTokens(tokenAddress: string, amount: string): Promis
     const recipientBytes32 = addressToBytes32(account.address);
     const nonce = generateNonce();
 
-    console.log(`[wormhole-bridge] Bridging ${amount} tokens (${tokenAddress}) from Base to Celo...`);
+    console.log(`[wormhole-bridge] Bridging ${amount} tokens (${tokenAddress}) from BSC to Celo...`);
 
     const currentAllowance = await baseClient.readContract({
       address: tokenAddress as `0x${string}`,
@@ -400,7 +400,7 @@ export async function bridgeTokens(tokenAddress: string, amount: string): Promis
         recipientChain: WORMHOLE_CHAIN_ID_CELO,
         recipient: account.address,
         blockNumber: receipt.blockNumber.toString(),
-        note: 'Transfer submitted on Base. Wait ~15 minutes for Wormhole guardians to produce a VAA. Then use the VAA to call completeTransfer on Celo to mint wrapped tokens.',
+        note: 'Transfer submitted on BSC. Wait ~15 minutes for Wormhole guardians to produce a VAA. Then use the VAA to call completeTransfer on Celo to mint wrapped tokens.',
       },
     };
   } catch (error: any) {
@@ -475,7 +475,7 @@ export async function getWrappedTokenAddress(tokenAddress: string): Promise<Brid
       wrappedAddress: isAttested ? wrappedAddress : undefined,
       data: {
         isAttested,
-        sourceChain: 'Base',
+        sourceChain: 'BSC',
         sourceChainId: WORMHOLE_CHAIN_ID_BASE,
         tokenAddress,
       },
@@ -540,7 +540,7 @@ export async function getWalletBalances(): Promise<WalletBalances> {
 
     const [baseNative, celoNative, selfclawBalance] = await Promise.all([
       baseClient.getBalance({ address }).catch((e: any) => {
-        console.error('[wormhole-bridge] Base native balance error:', e.message);
+        console.error('[wormhole-bridge] BSC native balance error:', e.message);
         return BigInt(0);
       }),
       celoClient.getBalance({ address }).catch((e: any) => {

@@ -129,7 +129,7 @@ Full API documentation: [tokenclaw.xyz/developers](https://tokenclaw.xyz/develop
 - **Backend**: Express.js
 - **Database**: PostgreSQL + Drizzle ORM
 - **Auth**: Self.xyz passport proofs (zero-knowledge)
-- **Blockchain**: Celo & Base (EVM)
+- **Blockchain**: Celo & BSC (EVM)
 - **Frontend**: Vanilla HTML/CSS/JS
 
 ## Project Structure
